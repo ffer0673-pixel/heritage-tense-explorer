@@ -1,0 +1,285 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Lora", ui-serif, Georgia, serif;
+}
+
+:root {
+  --radius: 0.875rem;
+
+  --background: oklch(99.087% 0.00297 264.799);
+  --foreground: oklch(0.21 0.04 260);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.21 0.04 260);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.21 0.04 260);
+
+  --primary: oklch(0.52 0.19 258);
+  --primary-foreground: oklch(0.99 0 0);
+  --primary-soft: oklch(0.96 0.03 258);
+
+  --secondary: oklch(0.965 0.01 250);
+  --secondary-foreground: oklch(0.25 0.04 260);
+
+  --muted: oklch(0.97 0.005 250);
+  --muted-foreground: oklch(0.5 0.02 258);
+
+  --accent: oklch(0.78 0.14 65);
+  --accent-foreground: oklch(0.22 0.04 260);
+  --accent-soft: oklch(82.783% 0.07409 73.886);
+
+  --destructive: oklch(0.62 0.22 25);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --success: oklch(0.62 0.16 155);
+
+  --border: oklch(0.92 0.01 250);
+  --input: oklch(0.92 0.01 250);
+  --ring: oklch(0.52 0.19 258);
+
+  --glass-bg: color-mix(in oklab, white 70%, transparent);
+  --glass-border: color-mix(in oklab, oklch(0.21 0.04 260) 10%, transparent);
+
+  --glass-nav-bg: color-mix(in oklab, white 60%, transparent);
+  --glass-nav-border: color-mix(in oklab, white 40%, transparent);
+  --glass-nav-highlight: color-mix(in oklab, white 35%, transparent);
+  --shadow-elegant: 0 10px 40px -12px color-mix(in oklab, oklch(0.21 0.04 260) 18%, transparent);
+  --shadow-glow: 0 0 60px -10px color-mix(in oklab, var(--primary) 35%, transparent);
+
+  --gradient-hero: radial-gradient(
+      1200px 600px at 80% -10%,
+      color-mix(in oklab, var(--primary) 14%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 500px at 0% 100%,
+      color-mix(in oklab, var(--accent) 16%, transparent),
+      transparent 60%
+    );
+}
+
+.dark {
+  --background: oklch(35.827% 0.13006 259.37);
+  --foreground: oklch(0.97 0.01 250);
+
+  --card: oklch(0.21 0.035 260);
+  --card-foreground: oklch(0.97 0.01 250);
+
+  --popover: oklch(0.21 0.035 260);
+  --popover-foreground: oklch(0.97 0.01 250);
+
+  --primary: oklch(100% 0.00011 271.152);
+  --primary-foreground: oklch(0.14 0.03 260);
+  --primary-soft: oklch(0.28 0.06 258);
+
+  --secondary: oklch(0.25 0.03 260);
+  --secondary-foreground: oklch(0.97 0.01 250);
+
+  --muted: oklch(0.28 0.06 258);
+  --muted-foreground: oklch(100% 0.00011 271.152);
+
+  --accent: oklch(0.82 0.14 70);
+  --accent-foreground: oklch(0.16 0.03 260);
+  --accent-soft: oklch(100% 0.00011 271.152);
+
+  --destructive: oklch(100% 0.00011 271.152);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --success: oklch(0.7 0.16 155);
+
+  --border: color-mix(in oklab, white 10%, transparent);
+  --input: color-mix(in oklab, white 12%, transparent);
+  --ring: oklch(0.72 0.16 258);
+
+  --glass-bg: color-mix(in oklab, oklch(0.21 0.035 260) 65%, transparent);
+  --glass-border: color-mix(in oklab, white 10%, transparent);
+
+  --glass-nav-bg: color-mix(in oklab, oklch(0.21 0.035 260) 50%, transparent);
+  --glass-nav-border: color-mix(in oklab, white 12%, transparent);
+  --glass-nav-highlight: color-mix(in oklab, white 8%, transparent);
+  --shadow-elegant: 0 14px 50px -12px rgba(0, 0, 0, 0.55);
+  --shadow-glow: 0 0 80px -10px color-mix(in oklab, var(--primary) 45%, transparent);
+
+  --gradient-hero: radial-gradient(
+      1200px 600px at 80% -10%,
+      color-mix(in oklab, var(--primary) 22%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 500px at 0% 100%,
+      color-mix(in oklab, var(--accent) 18%, transparent),
+      transparent 60%
+    );
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html,
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.025em;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 30%, transparent);
+  }
+}
+
+/* ---------- Custom utilities ---------- */
+
+@utility glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+
+@utility glass-nav {
+  background:
+    linear-gradient(180deg, var(--glass-nav-highlight) 0%, transparent 45%),
+    var(--glass-nav-bg);
+  border: 1px solid var(--glass-nav-border);
+  backdrop-filter: blur(24px) saturate(160%);
+  box-shadow: var(--shadow-elegant);
+}
+
+@utility glass-strong {
+  background: color-mix(in oklab, var(--card) 80%, transparent);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(24px) saturate(160%);
+}
+
+@utility shadow-elegant {
+  box-shadow: var(--shadow-elegant);
+}
+
+@utility shadow-glow {
+  box-shadow: var(--shadow-glow);
+}
+
+@utility bg-hero {
+  background: var(--gradient-hero);
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility font-serif {
+  font-family: var(--font-serif);
+}
+
+@utility heading-display {
+  font-family: var(--font-display);
+  font-weight: 300;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+/* ---------- Marquee ---------- */
+
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+@utility marquee-track-left {
+  animation: marquee-left var(--marquee-duration, 60s) linear infinite;
+}
+@utility marquee-track-right {
+  animation: marquee-right var(--marquee-duration, 60s) linear infinite;
+}
+@utility marquee-pause-on-hover {
+  &:hover { animation-play-state: paused; }
+}
+
+/* ---------- Subtle grid background ---------- */
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@utility bg-dots {
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--foreground) 12%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+/* ---------- Motif (Cina-Benteng inspired thin line decorative) ---------- */
+@utility motif-watermark {
+  background-image:
+    repeating-linear-gradient(45deg,
+      color-mix(in oklab, var(--accent) 8%, transparent) 0 1px,
+      transparent 1px 18px),
+    repeating-linear-gradient(-45deg,
+      color-mix(in oklab, var(--primary) 6%, transparent) 0 1px,
+      transparent 1px 18px);
+}
+
+/* Reveal animations */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@utility animate-fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
