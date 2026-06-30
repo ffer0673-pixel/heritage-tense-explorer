@@ -1,4 +1,4 @@
-import { TENSES, type Tense } from "./tenses";
+import { TENSES, type Tense } from "./tenses";// ambil TENSES type nya tense
 
 export interface QuizQuestion {
   id: string;
@@ -8,7 +8,7 @@ export interface QuizQuestion {
   explanation: string;
 }
 
-interface Template {
+interface Template { //cetakan
   prompt: (subject: string, marker: string) => string;
   build: (forms: { v1: string; v3: string; ing: string; aux: string }) => string[]; // 4 options
   correctIndex: number;

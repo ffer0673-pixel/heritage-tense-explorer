@@ -1,13 +1,13 @@
-export interface Developer {
+export interface Developer {// export =  izin kan file lain menggunakan file ini ,interface = Membuat aturan atau blueprint sebuah object.,developer = nama interface nya, {}Isi aturan dimulai dari sini.
   name: string;
   role: string;
   bio: string;
   initials: string;
   gradient: string;
-  image?: string;
+  image?: string; // ? = blueprint ini artinya boleh ada boleh tidak image nya, contoh yg di bawah role
 }
 
-export const DEVELOPERS: Developer[] = [
+export const DEVELOPERS: Developer[] = [ // Jadi setiap object di dalam DEVELOPERS harus mengikuti blueprint itu.,[] Array yang isinya banyak object Developer.
   {
     name: "Ferdian",
     role: "Engineering lead",
