@@ -15,6 +15,7 @@ import { Route as ReferenceRouteImport } from './routes/reference'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as CeritaRouteImport } from './routes/cerita'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TensesTenseRouteImport } from './routes/tenses_.$tense'
 import { Route as QuizQuizIdRouteImport } from './routes/quiz_.$quizId'
@@ -50,6 +51,11 @@ const CeritaRoute = CeritaRouteImport.update({
   path: '/cerita',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -73,6 +79,7 @@ const CeritaSlugRoute = CeritaSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/cerita': typeof CeritaRoute
   '/progress': typeof ProgressRoute
   '/quiz': typeof QuizRoute
@@ -85,6 +92,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/cerita': typeof CeritaRoute
   '/progress': typeof ProgressRoute
   '/quiz': typeof QuizRoute
@@ -98,6 +106,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/cerita': typeof CeritaRoute
   '/progress': typeof ProgressRoute
   '/quiz': typeof QuizRoute
@@ -112,6 +121,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/cerita'
     | '/progress'
     | '/quiz'
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/cerita'
     | '/progress'
     | '/quiz'
@@ -136,6 +147,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/cerita'
     | '/progress'
     | '/quiz'
@@ -149,6 +161,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   CeritaRoute: typeof CeritaRoute
   ProgressRoute: typeof ProgressRoute
   QuizRoute: typeof QuizRoute
@@ -204,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CeritaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -237,6 +257,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   CeritaRoute: CeritaRoute,
   ProgressRoute: ProgressRoute,
   QuizRoute: QuizRoute,

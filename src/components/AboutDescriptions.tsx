@@ -17,7 +17,7 @@ export function AboutDescriptions() {
         >
           {/* Text — plain, no box */}
           <div className="w-full lg:w-1/2">
-            <h3 className="mt-50 text-xl sm:text-2xl font-medium tracking-tight text-white">
+            <h3 className="mt-45 text-xl sm:text-2xl font-medium tracking-tight text-white">
               {c.title}
             </h3>
 

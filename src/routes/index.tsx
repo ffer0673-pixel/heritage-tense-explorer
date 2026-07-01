@@ -7,7 +7,6 @@ import { CATEGORIES, TENSES } from "@/data/tenses";
 import { STORIES } from "@/data/stories";
 import { AboutMarquee } from "@/components/AboutMarquee";
 import { AboutDescriptions } from "@/components/AboutDescriptions";
-import { TenseExperience } from "@/components/tenses-experience";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -39,7 +38,7 @@ function Home() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative pt-32 pb-24 sm:pt-40 sm:pb-28 overflow-hidden">
+      <section className="hero-section relative pt-32 pb-44 sm:pt-40 sm:pb-52 overflow-hidden">
         <div className="absolute inset-0 bg-hero -z-10" />
         <div className="absolute inset-0 bg-dots opacity-50 -z-10" />
         <div className="mx-auto max-w-7xl px-6">
@@ -48,7 +47,7 @@ function Home() {
       </section>
 
       {/* About Tangerang — full experience */}
-      <section className="py-20 overflow-hidden bg-white">
+      <section className="section-white-to-dark relative py-20 overflow-hidden light-scope">
         <div className="mx-auto max-w-7xl px-6">
           <Reveal>
             <div className="text-xs uppercase tracking-widest text-muted-foreground">About Tangerang</div>
@@ -74,7 +73,7 @@ function Home() {
       </section>
 
       {/* 16 Tenses — immersive scroll experience */}
-      <TenseExperience onLearnMore={(tense) => navigate({ to: "/tenses", search: { cat: tense.id } })} />
+      
 
       {/* Tenses preview */}
       <section className="py-20 mx-auto max-w-7xl px-6">

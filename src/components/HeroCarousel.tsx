@@ -16,7 +16,7 @@ export function HeroCarousel() {
   const dev = DEVELOPERS[active];
 
   return (
-    <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16 items-center">
+    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-12 items-center">
       {/* Left — text */}
       <div className="space-y-7 max-w-xl min-w-0">
         <span className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs font-medium text-muted-foreground">
@@ -43,7 +43,7 @@ export function HeroCarousel() {
 
       {/* Right — stacked carousel */}
       <div className="relative">
-        <div className="relative h-[340px] sm:h-[380px] flex items-center justify-center select-none">
+        <div className="relative h-[300px] sm:h-[340px] flex items-center justify-center select-none">
           {DEVELOPERS.map((d, i) => {
             const offset = ((i - active + n) % n + Math.floor(n / 2)) % n - Math.floor(n / 2);
             const isActive = offset === 0;
