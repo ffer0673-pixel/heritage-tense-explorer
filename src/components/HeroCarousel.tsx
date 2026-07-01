@@ -66,6 +66,9 @@ export function HeroCarousel() {
                     <img
                       src={d.image}
                       alt={d.name}
+                      loading="eager"
+  decoding="sync"
+  fetchPriority="high"
                       className="w-full h-full object-cover"
                     />
                   ) : (

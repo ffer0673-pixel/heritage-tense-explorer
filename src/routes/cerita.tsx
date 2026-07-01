@@ -4,6 +4,7 @@ import { STORIES } from "@/data/stories";
 import { useProgress } from "@/lib/progress-store";
 import { Check } from "lucide-react";
 
+
 export const Route = createFileRoute("/cerita")({
   head: () => ({
     meta: [

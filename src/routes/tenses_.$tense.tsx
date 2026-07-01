@@ -77,7 +77,7 @@ function TenseDetailPage() {
         </aside>
 
         {/* Main content */}
-        <article className="min-w-0">
+        <article className="light-scope min-w-0 rounded-3xl p-6 sm:p-10">
           <Reveal>
             <div className="text-xs uppercase tracking-widest text-primary">{t.category.replace("-", " ")}</div>
             <h1 className="heading-display text-4xl sm:text-5xl mt-2">{t.name}</h1>

@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { Marquee } from "@/components/Marquee";
 import { CATEGORIES, TENSES, tensesByCategory, type TenseCategory } from "@/data/tenses";
+import { useState, useEffect } from "react";
 
 export const Route = createFileRoute("/tenses")({
   head: () => ({
@@ -20,7 +20,16 @@ export const Route = createFileRoute("/tenses")({
 
 function TensesPage() {
   const [openCat, setOpenCat] = useState<TenseCategory | null>(null);
-
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const cat = params.get("cat") as TenseCategory | null;
+  if (cat) {
+    setOpenCat(cat);
+    setTimeout(() => {
+      document.getElementById(cat)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 300);
+  }
+}, []);
   return (
     <div className="pt-32 pb-20">
       <div className="mx-auto max-w-7xl px-6">
@@ -56,6 +65,7 @@ function TensesPage() {
           return (
             <motion.div
   key={c.key}
+  id={c.key}
   className={`glass rounded-3xl overflow-hidden ${open ? "shadow-glow" : ""}`}
 >
               <button

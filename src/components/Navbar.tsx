@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { to: "/", label: "Home" },
-  { to: "/about", label: "About Tangerang" },
   { to: "/tenses", label: "Tenses" },
   { to: "/quiz", label: "Quiz" },
   { to: "/cerita", label: "Cerita" },

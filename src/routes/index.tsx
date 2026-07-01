@@ -1,11 +1,13 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { HeroCarousel } from "@/components/HeroCarousel";
 import { Reveal } from "@/components/Reveal";
 import { CULTURAL_CARDS } from "@/data/cultural";
 import { CATEGORIES, TENSES } from "@/data/tenses";
 import { STORIES } from "@/data/stories";
-
+import { AboutMarquee } from "@/components/AboutMarquee";
+import { AboutDescriptions } from "@/components/AboutDescriptions";
+import { TenseExperience } from "@/components/tenses-experience";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -33,6 +35,7 @@ function SectionHead({ kicker, title, link, cta }: { kicker: string; title: stri
 }
 
 function Home() {
+  const navigate = useNavigate();
   return (
     <div>
       {/* Hero */}
@@ -44,41 +47,34 @@ function Home() {
         </div>
       </section>
 
-      {/* About preview */}
-      <section className="py-20 mx-auto max-w-7xl px-6">
-        <Reveal>
-          <SectionHead
-            kicker="About Tangerang"
-            title="Lima fragmen budaya yang jadi pelajaran tenses."
-            link="/about"
-            cta="Lihat Selengkapnya"
-          />
-        </Reveal>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {CULTURAL_CARDS.slice(0, 3).map((c, i) => (
-            <Reveal key={c.slug} delay={i * 0.08}>
-              <Link to="/about" className="block glass rounded-2xl p-6 h-full hover:-translate-y-1 hover:shadow-glow transition-all">
-                <div className="flex items-start justify-between">
-                  <div className="text-4xl">
-  {c.image ? (
-    <img
-      src={c.image}
-      alt={c.title}
-      className="w-16 h-16 object-cover rounded-xl"
-    />
-  ) : (
-    c.emoji
-  )}
-</div>
-                  <span className="rounded-full bg-accent-soft text-accent-foreground text-[10px] font-semibold uppercase tracking-wider px-2 py-1">{c.tense}</span>
-                </div>
-                <h3 className="mt-4 text-lg font-semibold">{c.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{c.short}</p>
-              </Link>
-            </Reveal>
-          ))}
+      {/* About Tangerang — full experience */}
+      <section className="py-20 overflow-hidden bg-white">
+        <div className="mx-auto max-w-7xl px-6">
+          <Reveal>
+            <div className="text-xs uppercase tracking-widest text-muted-foreground">About Tangerang</div>
+            <h2 className="heading-display text-3xl sm:text-4xl mt-2 max-w-2xl mb-10 text-neutral-900">
+              Lima fragmen budaya yang jadi pelajaran tenses.
+            </h2>
+          </Reveal>
         </div>
+        <AboutMarquee />
       </section>
+
+      {/* About Tangerang — detail description cards */}
+      <section className="py-20 bg-neutral-950">
+        <div className="mx-auto max-w-4xl px-6 mb-10">
+          <Reveal>
+            <div className="text-xs uppercase tracking-widest text-neutral-400">Cerita Selengkapnya</div>
+            <h2 className="heading-display text-3xl sm:text-4xl mt-2 text-white">
+              Setiap tempat, setiap tense.
+            </h2>
+          </Reveal>
+        </div>
+        <AboutDescriptions />
+      </section>
+
+      {/* 16 Tenses — immersive scroll experience */}
+      <TenseExperience onLearnMore={(tense) => navigate({ to: "/tenses", search: { cat: tense.id } })} />
 
       {/* Tenses preview */}
       <section className="py-20 mx-auto max-w-7xl px-6">

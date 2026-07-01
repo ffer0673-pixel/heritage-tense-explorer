@@ -5,33 +5,47 @@ import { Link } from "@tanstack/react-router";
 import { CULTURAL_CARDS, type CulturalCard } from "@/data/cultural";
 import { Marquee } from "./Marquee";
 
-function Card({ card, onClick }: { card: CulturalCard; onClick: () => void }) {
+const GRADIENTS = [
+  "from-indigo-600 via-purple-600 to-blue-700",
+  "from-rose-500 via-orange-500 to-amber-500",
+  "from-emerald-600 via-teal-600 to-cyan-600",
+  "from-violet-600 via-fuchsia-600 to-pink-600",
+  "from-blue-600 via-sky-500 to-cyan-500",
+];
+
+function Card({ card, index, onClick }: { card: CulturalCard; index: number; onClick: () => void }) {
+  const gradient = GRADIENTS[index % GRADIENTS.length];
+
   return (
     <button
       onClick={onClick}
-      className="group w-[320px] sm:w-[360px] glass rounded-2xl p-6 text-left transition-all hover:-translate-y-1 hover:shadow-glow"
+      className="group relative w-[300px] sm:w-[340px] text-left"
     >
-      <div className="flex items-start justify-between">
-       <div className="text-4xl">
-  {card.image ? (
-    <img
-      src={card.image}
-      alt={card.title}
-      className="w-16 h-16 object-cover rounded-xl"
-    />
-  ) : (
-    card.emoji
-  )}
-</div>
-        <span className="rounded-full bg-accent-soft text-accent-foreground text-[10px] font-semibold uppercase tracking-wider px-2 py-1">
+      <div className={`relative rounded-3xl bg-gradient-to-br ${gradient} pt-20 pb-6 px-5 h-full overflow-hidden shadow-lg transition-transform duration-300 group-hover:-translate-y-1`}>
+        {/* Floating photo card */}
+        <div className="absolute -top-3 left-5 right-5 rounded-2xl bg-white p-2 shadow-2xl rotate-[-2deg] transition-transform duration-300 group-hover:rotate-0 group-hover:-translate-y-1">
+          {card.image ? (
+            <img
+              src={card.image}
+              alt={card.title}
+              className="w-full h-32 object-cover rounded-xl"
+            />
+          ) : (
+            <div className="w-full h-32 grid place-items-center text-5xl bg-muted rounded-xl">
+              {card.emoji}
+            </div>
+          )}
+        </div>
+
+        <span className="inline-block rounded-full bg-white/20 text-white text-[10px] font-semibold uppercase tracking-wider px-2 py-1 backdrop-blur-sm">
           {card.tense}
         </span>
+        <h3 className="mt-3 text-lg font-semibold tracking-tight text-white">{card.title}</h3>
+        <p className="mt-2 text-sm text-white/80 line-clamp-3">{card.short}</p>
+        <p className="mt-4 text-sm font-serif italic border-l-2 border-white/40 pl-3 text-white/90">
+          "{card.exampleEn}"
+        </p>
       </div>
-      <h3 className="mt-4 text-lg font-semibold tracking-tight">{card.title}</h3>
-      <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{card.short}</p>
-      <p className="mt-4 text-sm font-serif italic border-l-2 border-primary/40 pl-3 text-foreground/85">
-        "{card.exampleEn}"
-      </p>
     </button>
   );
 }
@@ -44,13 +58,13 @@ export function AboutMarquee() {
   return (
     <div className="space-y-6">
       <Marquee direction="left" duration={70}>
-        {row1.map((c) => (
-          <Card key={"r1-" + c.slug} card={c} onClick={() => setOpen(c)} />
+        {row1.map((c, i) => (
+          <Card key={"r1-" + c.slug} card={c} index={i} onClick={() => setOpen(c)} />
         ))}
       </Marquee>
       <Marquee direction="right" duration={80}>
-        {row2.map((c) => (
-          <Card key={"r2-" + c.slug} card={c} onClick={() => setOpen(c)} />
+        {row2.map((c, i) => (
+          <Card key={"r2-" + c.slug} card={c} index={i + 1} onClick={() => setOpen(c)} />
         ))}
       </Marquee>
 
@@ -78,18 +92,22 @@ export function AboutMarquee() {
               >
                 <X className="h-4 w-4" />
               </button>
-              <div className="text-5xl">
-  {open.image ? (
-    <img
-      src={open.image}
-      alt={open.title}
-      className="w-20 h-20 object-cover rounded-xl"
-    />
-  ) : (
-    open.emoji
-  )}
-</div>
-              <h3 className="mt-3 text-2xl font-semibold tracking-tight">{open.title}</h3>
+
+              <div className="rounded-2xl bg-white p-2 shadow-lg w-fit">
+                {open.image ? (
+                  <img
+                    src={open.image}
+                    alt={open.title}
+                    className="w-24 h-24 object-cover rounded-xl"
+                  />
+                ) : (
+                  <div className="w-24 h-24 grid place-items-center text-5xl bg-muted rounded-xl">
+                    {open.emoji}
+                  </div>
+                )}
+              </div>
+
+              <h3 className="mt-4 text-2xl font-semibold tracking-tight">{open.title}</h3>
               <p className="mt-3 text-muted-foreground">{open.extended}</p>
 
               <div className="mt-6 space-y-3">
