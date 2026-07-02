@@ -67,8 +67,8 @@ export function HeroCarousel() {
                       src={d.image}
                       alt={d.name}
                       loading="eager"
-  decoding="sync"
-  fetchPriority="high"
+                      decoding="sync"
+                      fetchPriority="high"
                       className="w-full h-full object-cover"
                     />
                   ) : (
@@ -90,18 +90,20 @@ export function HeroCarousel() {
 
         {/* Made by — di bawah carousel */}
        {/* Made by — di bawah carousel */}
-<AnimatePresence mode="wait">
-  <motion.div
-    key={dev.name}
-    initial={{ opacity: 0, y: 12 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -8 }}
-    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-    className="mt-2 text-center"
-  >
-    <p className="mt-2 text-sm text-muted-foreground">{dev.bio}</p>
-  </motion.div>
-</AnimatePresence>
+<div className="mt-10 h-[90px] flex flex-col items-center justify-start">
+  <AnimatePresence mode="wait">
+    <motion.div
+      key={dev.name}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -12 }}
+      transition={{ duration: 0.4 }}
+      className="text-center"
+    >
+      <p>{dev.bio}</p>
+    </motion.div>
+  </AnimatePresence>
+</div>
       </div>
     </div>
   );
