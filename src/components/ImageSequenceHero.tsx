@@ -2,7 +2,7 @@ import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 
 /** Total number of frames in the sequence */
-const FRAME_COUNT = 192;
+const FRAME_COUNT = 240;
 
 /** How tall the scroll container is relative to viewport — controls scroll "duration" */
 const SCROLL_HEIGHT_VH = 500;
@@ -11,7 +11,7 @@ const SCROLL_HEIGHT_VH = 500;
 function getFrameUrls(): string[] {
   const urls: string[] = [];
   for (let i = 1; i <= FRAME_COUNT; i++) {
-    urls.push(`/image_squence/ezgif-frame-${String(i).padStart(3, "0")}.jpg`);
+    urls.push(`/fer/ezgif-frame-${String(i).padStart(3, "0")}.jpg`);
   }
   return urls;
 }
