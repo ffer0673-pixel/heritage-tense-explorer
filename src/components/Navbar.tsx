@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { to: "/", label: "Home" },
-  { to: "/tenses", label: "Tenses" },
   { to: "/quiz", label: "Quiz" },
   { to: "/cerita", label: "Cerita" },
   { to: "/progress", label: "Progress" },
@@ -86,7 +85,7 @@ export function Navbar() {
         <div className="flex items-center gap-2">
          
           <Link
-            to="/tenses"
+            to="/tenses/simple-present"
             className="hidden sm:inline-flex items-center rounded-full bg-primary px-4 py-2 text-[13px] font-medium text-primary-foreground shadow-elegant transition-transform hover:-translate-y-0.5"
           >
             Mulai Belajar

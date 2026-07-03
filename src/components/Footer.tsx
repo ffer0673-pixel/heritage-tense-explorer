@@ -3,7 +3,7 @@ import { Mail, Globe, MessageCircle } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border mt-32">
+    <footer className="relative z-10 border-t border-border pt-32 bg-background">
       <div className="mx-auto max-w-7xl px-6 py-16 grid gap-12 md:grid-cols-4">
         <div className="md:col-span-1">
           <div className="flex items-center gap-2">

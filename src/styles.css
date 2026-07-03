@@ -326,31 +326,7 @@
   animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* ---------- Hero → next section atmospheric gradient ---------- */
-.hero-section::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 120px;
-  pointer-events: none;
-  z-index: 1;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(255, 255, 255, 0.02) 10%,
-    rgba(255, 255, 255, 0.06) 22%,
-    rgba(255, 255, 255, 0.13) 34%,
-    rgba(255, 255, 255, 0.22) 44%,
-    rgba(255, 255, 255, 0.36) 54%,
-    rgba(255, 255, 255, 0.52) 64%,
-    rgba(255, 255, 255, 0.70) 74%,
-    rgba(255, 255, 255, 0.86) 84%,
-    rgba(255, 255, 255, 0.95) 92%,
-    #ffffff 100%
-  );
-}
+
 
 /* ---------- White → dark section atmospheric gradient ---------- */
 .section-white-to-dark::after {

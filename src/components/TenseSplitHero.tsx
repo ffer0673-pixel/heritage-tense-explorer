@@ -13,6 +13,7 @@ export interface TenseHeroData {
   byline?: string;     // teks kecil di dekat foto, misal jumlah sub-tense
   imageAlt: string;    // alt text untuk foto (kosong dulu, tinggal isi src)
   imageSrc?: string;   // <-- ISI DI SINI kalau sudah ada foto, biarkan undefined/"" dulu
+  ctaLink?: string;    // URL tujuan CTA "Jelajahi Tenses"
 }
 
 /**
@@ -20,7 +21,7 @@ export interface TenseHeroData {
  * Makin besar -> transisi makin "lambat" / makin banyak scroll yang dibutuhkan
  * untuk berpindah dari satu kategori ke kategori berikutnya.
  */
-const SCROLL_VH_PER_ITEM = 130;
+const SCROLL_VH_PER_ITEM = 160;
 
 /**
  * Satu "slide" konten (word besar + foto + teks kecil) di dalam section pinned.
@@ -149,14 +150,14 @@ function TenseHeroSlide({
         {/* tagline — kiri bawah + CTA */}
         <motion.div
           style={{ opacity: textOpacity, y: textY }}
-          className="absolute bottom-[8%] left-[5%] sm:left-[8%] max-w-[260px] z-40"
+          className="absolute bottom-[18%] left-[5%] sm:left-[8%] max-w-[260px] z-40"
         >
-          <p className="text-[12px] sm:text-[13px] text-neutral-500 leading-snug">{data.tagline}</p>
+          <p className="text-[13px] sm:text-[15px] text-neutral-500 leading-snug">{data.tagline}</p>
           <Link
-            to="/tenses"
+            to={data.ctaLink || "/tenses"}
             className="group mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-primary/80 hover:text-primary transition-colors"
           >
-            Jelajahi {data.word1} Tenses
+            Jelajahi Tenses
             <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </motion.div>
