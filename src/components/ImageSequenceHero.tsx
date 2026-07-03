@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, useCallback } from "react";
-import { useScroll, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 
 /** Total number of frames in the sequence */
 const FRAME_COUNT = 192;
@@ -18,14 +18,8 @@ function getFrameUrls(): string[] {
 
 /**
  * Draw an image on the canvas at native physical pixel resolution.
- *
- * Uses object-fit: contain logic — the image is fitted inside the canvas
- * at its original aspect ratio without upscaling beyond 1:1 pixel mapping.
- * High-quality image smoothing is enabled for any necessary downscaling.
- *
- * All coordinates are in PHYSICAL pixels (canvas.width / canvas.height),
- * NOT CSS pixels. No ctx.scale() is used — we draw directly at device
- * resolution to avoid any transform-based blurring.
+ * Uses object-fit: cover — fills entire canvas, crops overflow.
+ * All coordinates are in PHYSICAL pixels (canvas.width / canvas.height).
  */
 function drawFrame(
   ctx: CanvasRenderingContext2D,
@@ -37,15 +31,12 @@ function drawFrame(
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = "high";
 
-  const imgW = img.naturalWidth;
-  const imgH = img.naturalHeight;
-  const imgRatio = imgW / imgH;
+  const imgRatio = img.naturalWidth / img.naturalHeight;
   const canvasRatio = physW / physH;
 
   let drawW: number;
   let drawH: number;
 
-  // object-fit: cover — fill entire canvas, crop overflow to preserve aspect ratio
   if (imgRatio > canvasRatio) {
     drawH = physH;
     drawW = physH * imgRatio;
@@ -60,15 +51,121 @@ function drawFrame(
   ctx.drawImage(img, x, y, drawW, drawH);
 }
 
+/* ────────────────────────────────────────────────────────
+ * Text overlay groups — scroll-driven, positioned over canvas
+ * ──────────────────────────────────────────────────────── */
+
 /**
- * Apple-style scroll-driven image sequence hero.
- *
- * - Preloads all frames before starting.
- * - Renders to <canvas> at native device pixel resolution for maximum sharpness.
- * - Scroll progress mapped to frame index via framer-motion useScroll.
- * - Section is pinned (sticky) while the sequence plays, then releases.
- * - No React state updates during scroll — fully imperative drawing.
+ * Group 1: "TensesAround US" title + line + subtexts
+ * Appears at scroll progress 0.02–0.22, fades out by 0.28
  */
+function HeroTextGroup1({ scrollYProgress }: { scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"] }) {
+  // Title "TensesAroundUs" + line — fade in fast, hold long, fade out slowly
+  const titleOpacity = useTransform(scrollYProgress, [0.02, 0.07, 0.28, 0.38], [0, 1, 1, 0]);
+  const lineScaleX = useTransform(scrollYProgress, [0.03, 0.10, 0.28, 0.38], [0, 1, 1, 0]);
+
+  // Left subtext "For Learn Interaktif" — slide up fast, hold long, fade out slowly
+  const leftOpacity = useTransform(scrollYProgress, [0.06, 0.12, 0.28, 0.38], [0, 1, 1, 0]);
+  const leftY = useTransform(scrollYProgress, [0.06, 0.12, 0.28, 0.38], [40, 0, 0, -30]);
+
+  // Right subtext "Real Stories..." — slide up fast, hold long, fade out slowly
+  const rightOpacity = useTransform(scrollYProgress, [0.08, 0.14, 0.28, 0.38], [0, 1, 1, 0]);
+  const rightY = useTransform(scrollYProgress, [0.08, 0.14, 0.28, 0.38], [40, 0, 0, -30]);
+
+  return (
+    <div className="absolute inset-0 flex flex-col justify-start pt-[14vh] sm:pt-[12vh] px-8 sm:px-12 lg:px-20">
+      {/* Title: TensesAround + US superscript */}
+      <motion.div style={{ opacity: titleOpacity }}>
+        <h1 className="text-white font-black tracking-tight leading-[0.9] select-none"
+            style={{ fontFamily: "'Inter', system-ui, sans-serif", fontSize: "clamp(2.5rem, 8vw, 7rem)" }}>
+          TensesAround
+          <span className="relative text-white font-black"
+                style={{ fontSize: "clamp(1.2rem, 3.5vw, 3rem)", verticalAlign: "super", marginLeft: "0.1em" }}>
+            US
+          </span>
+        </h1>
+      </motion.div>
+
+      {/* Horizontal line */}
+      <motion.div
+        style={{ scaleX: lineScaleX, opacity: titleOpacity }}
+        className="mt-4 sm:mt-5 h-[2px] bg-white origin-left"
+      />
+
+      {/* Bottom row: left text + right text */}
+      <div className="mt-6 sm:mt-8 flex items-start justify-between gap-8 flex-wrap">
+        {/* Left: "For Learn Interaktif" */}
+        <motion.div style={{ opacity: leftOpacity, y: leftY }}>
+          <p className="text-white font-bold text-sm sm:text-base lg:text-lg leading-snug"
+             style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
+            For Learn Interaktif
+          </p>
+        </motion.div>
+
+        {/* Right: "Real Stories..." */}
+        <motion.div style={{ opacity: rightOpacity, y: rightY }} className="text-right max-w-[280px]">
+          <p className="text-white/90 font-semibold text-sm sm:text-base leading-snug"
+             style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
+            Real Stories
+          </p>
+          <p className="text-white/70 text-xs sm:text-sm mt-1 leading-relaxed"
+             style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
+            Discover grammar through<br />culture and daily life.
+          </p>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Group 2: "For Learn Interaktif / For Learn daily" + descriptions
+ * Appears at scroll progress 0.30–0.48, fades out by 0.55
+ */
+function HeroTextGroup2({ scrollYProgress }: { scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"] }) {
+  const line1Opacity = useTransform(scrollYProgress, [0.30, 0.35], [0, 1]);
+  const line1Y = useTransform(scrollYProgress, [0.30, 0.35], [50, 0]);
+
+  const line2Opacity = useTransform(scrollYProgress, [0.32, 0.37], [0, 1]);
+  const line2Y = useTransform(scrollYProgress, [0.32, 0.37], [50, 0]);
+
+  const descOpacity = useTransform(scrollYProgress, [0.35, 0.40], [0, 1]);
+  const descY = useTransform(scrollYProgress, [0.35, 0.40], [40, 0]);
+
+  return (
+    <div className="absolute bottom-[12%] sm:bottom-[16%] left-0 px-8 sm:px-12 lg:px-20">
+      <motion.h2
+        style={{ opacity: line1Opacity, y: line1Y, fontFamily: "'Inter', system-ui, sans-serif" }}
+        className="text-white font-extrabold text-xl sm:text-2xl lg:text-3xl leading-tight"
+      >
+        For Learn Interaktif
+      </motion.h2>
+
+      <motion.h2
+        style={{ opacity: line2Opacity, y: line2Y, fontFamily: "'Inter', system-ui, sans-serif" }}
+        className="text-white font-extrabold text-xl sm:text-2xl lg:text-3xl leading-tight"
+      >
+        For Learn daily
+      </motion.h2>
+
+      <motion.div style={{ opacity: descOpacity, y: descY }} className="mt-4">
+        <p className="text-white/80 text-sm sm:text-base leading-relaxed"
+           style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
+          Learn English Naturally
+        </p>
+        <p className="text-white/60 text-xs sm:text-sm mt-1 leading-relaxed"
+           style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
+          Explore tenses through real-life stories and local culture.
+        </p>
+      </motion.div>
+    </div>
+  );
+}
+
+/* ────────────────────────────────────────────────────────
+ * Main component
+ * ──────────────────────────────────────────────────────── */
+
 export function ImageSequenceHero() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -98,7 +195,6 @@ export function ImageSequenceHero() {
         }
       };
       img.onerror = () => {
-        // Still count errored frames so we don't block forever
         loadedCount++;
         if (loadedCount === FRAME_COUNT) {
           framesRef.current = images;
@@ -119,19 +215,12 @@ export function ImageSequenceHero() {
     const dpr = window.devicePixelRatio || 1;
     const rect = parent.getBoundingClientRect();
 
-    // Round to exact integers to avoid sub-pixel blurring
     const physW = Math.round(rect.width * dpr);
     const physH = Math.round(rect.height * dpr);
 
-    // Set internal resolution to physical device pixels
     canvas.width = physW;
     canvas.height = physH;
 
-    // NO ctx.scale() — we draw directly at physical pixel coordinates.
-    // The browser downsamples from canvas.width/height to the CSS display
-    // size, giving a 1:1 physical-pixel mapping on HiDPI screens.
-
-    // Redraw current frame at new size
     const ctx = canvas.getContext("2d");
     if (ctx) {
       const img = framesRef.current[currentFrameRef.current];
@@ -181,7 +270,6 @@ export function ImageSequenceHero() {
       Math.max(0, Math.floor(v * (FRAME_COUNT - 1))),
     );
 
-    // Only redraw when the frame actually changes
     if (frameIndex === currentFrameRef.current) return;
     currentFrameRef.current = frameIndex;
 
@@ -196,7 +284,6 @@ export function ImageSequenceHero() {
       const img = framesRef.current[frameIndex];
       if (!img) return;
 
-      // Always use the physical pixel dimensions — no CSS-pixel indirection
       drawFrame(ctx, img, canvas.width, canvas.height);
     });
   });
@@ -225,7 +312,7 @@ export function ImageSequenceHero() {
           </div>
         )}
 
-        {/* Canvas — sized via CSS to fill viewport, internal resolution set via JS */}
+        {/* Canvas */}
         <canvas
           ref={canvasRef}
           style={{
@@ -236,10 +323,17 @@ export function ImageSequenceHero() {
             transition: "opacity 0.4s ease",
           }}
         />
+
+        {/* Text overlays — positioned on top of canvas, animated by scroll */}
+        {loaded && (
+          <>
+            <HeroTextGroup1 scrollYProgress={scrollYProgress} />
+            <HeroTextGroup2 scrollYProgress={scrollYProgress} />
+          </>
+        )}
       </div>
 
-      {/* Scroll spacer — provides scroll distance for the image sequence animation.
-          This div is invisible but its height drives the useScroll progress. */}
+      {/* Scroll spacer — provides scroll distance for the image sequence animation */}
       <div
         ref={sectionRef}
         style={{ height: `${SCROLL_HEIGHT_VH}vh`, position: "relative", zIndex: 0 }}
