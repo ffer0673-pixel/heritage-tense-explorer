@@ -31,22 +31,7 @@ export function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 pointer-events-none">
-      <div className="mx-auto mt-4 flex max-w-7xl items-center justify-between gap-3 px-4 pointer-events-auto">
-        {/* Logo */}
-        <Link
-          to="/"
-          className={cn(
-            "group flex items-center gap-2 rounded-full px-4 py-2 transition-all duration-300",
-            scrolled && "glass-nav"
-          )}
-        >
-         <img
-  src="/logo.png"
-  alt="Logo"
-  className="h-8 w-8 rounded-lg object-cover"
-/>
-          <span className="text-sm font-medium tracking-tight">Tenses Around Us</span>
-        </Link>
+      <div className="mx-auto mt-4 flex max-w-7xl items-center justify-center gap-3 px-4 pointer-events-auto">
 
         {/* Center pill */}
         <nav
@@ -82,14 +67,7 @@ export function Navbar() {
           })}
         </nav>
 
-        <div className="flex items-center gap-2">
-         
-          <Link
-            to="/tenses/simple-present"
-            className="hidden sm:inline-flex items-center rounded-full bg-primary px-4 py-2 text-[13px] font-medium text-primary-foreground shadow-elegant transition-transform hover:-translate-y-0.5"
-          >
-            Mulai Belajar
-          </Link>
+        <div className="flex items-center gap-2 lg:hidden">
           <button
             onClick={() => setOpen((v) => !v)}
             aria-label="Menu"

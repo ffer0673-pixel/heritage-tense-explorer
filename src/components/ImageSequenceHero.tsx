@@ -68,9 +68,9 @@ function HeroTextGroup1({ scrollYProgress }: { scrollYProgress: ReturnType<typeo
   const leftOpacity = useTransform(scrollYProgress, [0.06, 0.12, 0.28, 0.38], [0, 1, 1, 0]);
   const leftY = useTransform(scrollYProgress, [0.06, 0.12, 0.28, 0.38], [40, 0, 0, -30]);
 
-  // Right subtext "Real Stories..." — slide up fast, hold long, fade out slowly
-  const rightOpacity = useTransform(scrollYProgress, [0.08, 0.14, 0.28, 0.38], [0, 1, 1, 0]);
-  const rightY = useTransform(scrollYProgress, [0.08, 0.14, 0.28, 0.38], [40, 0, 0, -30]);
+  // Right subtext "Real Stories..." — fade out by 70%
+  const rightOpacity = useTransform(scrollYProgress, [0.42, 0.48, 0.60, 0.70], [0, 1, 1, 0]);
+  const rightY = useTransform(scrollYProgress, [0.42, 0.48, 0.60, 0.70], [40, 0, 0, -30]);
 
   return (
     <div className="absolute inset-0 flex flex-col justify-start pt-[14vh] sm:pt-[12vh] px-8 sm:px-12 lg:px-20">
@@ -96,19 +96,19 @@ function HeroTextGroup1({ scrollYProgress }: { scrollYProgress: ReturnType<typeo
       <div className="mt-6 sm:mt-8 flex items-start justify-between gap-8 flex-wrap">
         {/* Left: "For Learn Interaktif" */}
         <motion.div style={{ opacity: leftOpacity, y: leftY }}>
-          <p className="text-white font-bold text-sm sm:text-base lg:text-lg leading-snug"
+          <p className="text-white font-bold text-lg sm:text-xl lg:text-2xl leading-snug"
              style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
             For Learn Interaktif
           </p>
         </motion.div>
 
         {/* Right: "Real Stories..." */}
-        <motion.div style={{ opacity: rightOpacity, y: rightY }} className="text-right max-w-[280px]">
-          <p className="text-white/90 font-semibold text-sm sm:text-base leading-snug"
+        <motion.div style={{ opacity: rightOpacity, y: rightY }} className="text-right max-w-xl">
+          <p className="text-white/95 font-black text-3xl sm:text-4xl lg:text-5xl leading-snug"
              style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
             Real Stories
           </p>
-          <p className="text-white/70 text-xs sm:text-sm mt-1 leading-relaxed"
+          <p className="text-white/85 text-lg sm:text-xl lg:text-2xl mt-3 leading-relaxed"
              style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
             Discover grammar through<br />culture and daily life.
           </p>
@@ -123,37 +123,37 @@ function HeroTextGroup1({ scrollYProgress }: { scrollYProgress: ReturnType<typeo
  * Appears at scroll progress 0.30–0.48, fades out by 0.55
  */
 function HeroTextGroup2({ scrollYProgress }: { scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"] }) {
-  const line1Opacity = useTransform(scrollYProgress, [0.30, 0.35], [0, 1]);
-  const line1Y = useTransform(scrollYProgress, [0.30, 0.35], [50, 0]);
+  const line1Opacity = useTransform(scrollYProgress, [0.30, 0.35, 0.45, 0.50], [0, 1, 1, 0]);
+  const line1Y = useTransform(scrollYProgress, [0.30, 0.35, 0.45, 0.50], [50, 0, 0, -20]);
 
-  const line2Opacity = useTransform(scrollYProgress, [0.32, 0.37], [0, 1]);
-  const line2Y = useTransform(scrollYProgress, [0.32, 0.37], [50, 0]);
+  const line2Opacity = useTransform(scrollYProgress, [0.32, 0.37, 0.45, 0.50], [0, 1, 1, 0]);
+  const line2Y = useTransform(scrollYProgress, [0.32, 0.37, 0.45, 0.50], [50, 0, 0, -20]);
 
-  const descOpacity = useTransform(scrollYProgress, [0.35, 0.40], [0, 1]);
-  const descY = useTransform(scrollYProgress, [0.35, 0.40], [40, 0]);
+  const descOpacity = useTransform(scrollYProgress, [0.35, 0.39, 0.45, 0.50], [0, 1, 1, 0]);
+  const descY = useTransform(scrollYProgress, [0.35, 0.39, 0.45, 0.50], [40, 0, 0, -20]);
 
   return (
-    <div className="absolute bottom-[12%] sm:bottom-[16%] left-0 px-8 sm:px-12 lg:px-20">
+    <div className="absolute bottom-[12%] sm:bottom-[16%] left-0 px-8 sm:px-12 lg:px-20 max-w-3xl">
       <motion.h2
         style={{ opacity: line1Opacity, y: line1Y, fontFamily: "'Inter', system-ui, sans-serif" }}
-        className="text-white font-extrabold text-xl sm:text-2xl lg:text-3xl leading-tight"
+        className="text-white font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-tight"
       >
         For Learn Interaktif
       </motion.h2>
 
       <motion.h2
         style={{ opacity: line2Opacity, y: line2Y, fontFamily: "'Inter', system-ui, sans-serif" }}
-        className="text-white font-extrabold text-xl sm:text-2xl lg:text-3xl leading-tight"
+        className="text-white font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-tight"
       >
         For Learn daily
       </motion.h2>
 
-      <motion.div style={{ opacity: descOpacity, y: descY }} className="mt-4">
-        <p className="text-white/80 text-sm sm:text-base leading-relaxed"
+      <motion.div style={{ opacity: descOpacity, y: descY }} className="mt-6">
+        <p className="text-white/90 text-xl sm:text-2xl lg:text-3xl font-medium leading-relaxed"
            style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
           Learn English Naturally
         </p>
-        <p className="text-white/60 text-xs sm:text-sm mt-1 leading-relaxed"
+        <p className="text-white/70 text-lg sm:text-xl lg:text-2xl mt-2 leading-relaxed"
            style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
           Explore tenses through real-life stories and local culture.
         </p>
@@ -323,15 +323,18 @@ export function ImageSequenceHero() {
             transition: "opacity 0.4s ease",
           }}
         />
-
-        {/* Text overlays — positioned on top of canvas, animated by scroll */}
-        {loaded && (
-          <>
-            <HeroTextGroup1 scrollYProgress={scrollYProgress} />
-            <HeroTextGroup2 scrollYProgress={scrollYProgress} />
-          </>
-        )}
       </div>
+
+      {/* Fixed text overlay layer — on top of incoming white sections (z-10) */}
+      {loaded && (
+        <div
+          className="fixed inset-0 z-20 h-screen w-full overflow-hidden pointer-events-none"
+          style={{ pointerEvents: "none" }}
+        >
+          <HeroTextGroup1 scrollYProgress={scrollYProgress} />
+          <HeroTextGroup2 scrollYProgress={scrollYProgress} />
+        </div>
+      )}
 
       {/* Scroll spacer — provides scroll distance for the image sequence animation */}
       <div
