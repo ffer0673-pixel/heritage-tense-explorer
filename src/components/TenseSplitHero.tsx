@@ -175,6 +175,11 @@ function TenseHeroSlide({
  * - Semua slide kategori ditumpuk absolute di dalam wrapper sticky itu; masing-masing
  *   slide masuk & keluar (berlawanan arah) berdasarkan posisi scrollYProgress
  *   di jatah segmennya sendiri — bukan animasi "sekali jalan".
+ *
+ * NOTE: QuizShowcase TIDAK lagi menjadi slide ke-5 di sini. QuizShowcase sekarang
+ * dirender sebagai section independen (lihat routes/index.tsx) dengan sticky-pin
+ * sendiri, supaya bisa di-cover secara terpisah oleh section Progress Preview
+ * (Apple-style "next section slides over" transition).
  */
 export function TenseSplitHero({ items }: { items: TenseHeroData[] }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -184,13 +189,14 @@ export function TenseSplitHero({ items }: { items: TenseHeroData[] }) {
     offset: ["start start", "end end"], // 0 = section baru mulai pin, 1 = section selesai di-pin
   });
 
-  const segment = 1 / items.length;
+  const totalCount = items.length;
+  const segment = 1 / totalCount;
 
   return (
     <section
       ref={ref}
       className="relative"
-      style={{ height: `${items.length * SCROLL_VH_PER_ITEM}vh` }}
+      style={{ height: `${totalCount * SCROLL_VH_PER_ITEM}vh` }}
     >
       <div className="sticky top-0 h-[100svh] overflow-hidden bg-white light-scope border-t border-neutral-100">
         {items.map((data, i) => (

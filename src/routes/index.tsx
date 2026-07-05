@@ -1,15 +1,15 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useRef } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, type Variants, useScroll } from "framer-motion";
 import { ImageSequenceHero } from "@/components/ImageSequenceHero";
 import { Reveal } from "@/components/Reveal";
-import { QuizShowcase } from "@/components/QuizShowcase";
-import { CULTURAL_CARDS } from "@/data/cultural";
 import { CATEGORIES, TENSES } from "@/data/tenses";
-import { STORIES } from "@/data/stories";
 import { AboutMarquee } from "@/components/AboutMarquee";
 import { AboutDescriptions } from "@/components/AboutDescriptions";
 import { TenseSplitHero, type TenseHeroData } from "@/components/TenseSplitHero";
+import { QuizShowcase } from "@/components/QuizShowcase";
+import StoryShowcase from "@/components/StoryShowcase";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -23,23 +23,23 @@ export const Route = createFileRoute("/")({
 });
 
 /* ── Scroll animation variants ── */
-const stagger = {
+const stagger: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.14 } },
 };
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 50 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] } },
 };
-const slideLeft = {
+const slideLeft: Variants = {
   hidden: { opacity: 0, x: -60 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] } },
 };
-const slideRight = {
+const slideRight: Variants = {
   hidden: { opacity: 0, x: 60 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] } },
 };
-const scaleIn = {
+const scaleIn: Variants = {
   hidden: { opacity: 0, scale: 0.92 },
   visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
 };
@@ -86,7 +86,12 @@ const TENSE_HERO_DATA: TenseHeroData[] = CATEGORIES.map((c) => {
 });
 
 function Home() {
-  const navigate = useNavigate();
+  const quizTrackerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: quizScrollProgress } = useScroll({
+    target: quizTrackerRef,
+    offset: ["start start", "end end"],
+  });
+
   return (
     <div>
       {/* Hero — scroll-driven image sequence (fixed canvas + spacer) */}
@@ -96,70 +101,78 @@ function Home() {
           As the user scrolls past the hero spacer, these sections
           slide up and cover the hero (Apple-style reveal). */}
       <div className="relative z-10">
-        {/* About Tangerang — detail description cards */}
-        <section className="py-20 bg-white light-scope">
-          <div className="mx-auto max-w-4xl px-6 mb-10">
-            <Reveal>
-              <div className="text-xs uppercase tracking-widest text-neutral-500">Cerita Selengkapnya</div>
-              <h2 className="heading-display text-3xl sm:text-4xl mt-2 text-neutral-900">
-                Setiap tempat, setiap tense.
-              </h2>
-            </Reveal>
-          </div>
-          <AboutDescriptions />
-        </section>
-
-        {/* Marquee teks berjalan — antara cerita dan tenses */}
-        <section className="relative py-10 overflow-hidden bg-white light-scope">
-          <AboutMarquee />
-        </section>
+        {/* Apple Story Showcase (NEW) */}
+        <StoryShowcase />
 
         {/* ═══════ Tenses preview — 4 hero sections, split-word scroll animation ═══════ */}
         <section className="relative bg-white light-scope">
           <TenseSplitHero items={TENSE_HERO_DATA} />
         </section>
 
-        {/* ═══════ Quiz preview — floating cards + wavy ribbon ═══════ */}
-        <QuizShowcase />
+        {/* ═══════ Quiz Showcase & Progress Preview Container ═══════ */}
+        <div className="relative z-10 bg-white">
+          {/* Absolute scroll tracker for QuizShowcase animations */}
+          <div
+            ref={quizTrackerRef}
+            className="absolute top-0 left-0 w-full pointer-events-none"
+            style={{ height: "300vh" }}
+          />
 
-
-
-        {/* ═══════ Progress preview ═══════ */}
-        <section className="py-28 bg-background">
-          <div className="mx-auto max-w-7xl px-6">
-            <motion.div variants={slideLeft} initial="hidden" whileInView="visible" viewport={vp}>
-              <SectionHead kicker="Progress" title="Lihat seberapa jauh perjalananmu." link="/progress" cta="Buka Dashboard" />
-            </motion.div>
-
-            {/* Card scales in from center */}
-            <motion.div variants={scaleIn} initial="hidden" whileInView="visible" viewport={vp}>
-              <div className="relative overflow-hidden rounded-3xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-sm p-12">
-                <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
-
-                {/* Stats stagger in one by one */}
-                <motion.div
-                  variants={stagger}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  className="grid sm:grid-cols-4 gap-8 text-center"
-                >
-                  {[
-                    { v: "0/16", l: "Tenses dikuasai" },
-                    { v: "0%", l: "Skor rata-rata" },
-                    { v: "0", l: "Cerita selesai" },
-                    { v: "0", l: "Streak hari" },
-                  ].map((s) => (
-                    <motion.div key={s.l} variants={fadeUp}>
-                      <div className="text-4xl heading-editorial text-accent">{s.v}</div>
-                      <div className="mt-2 text-xs uppercase tracking-[0.15em] text-muted-foreground font-medium">{s.l}</div>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              </div>
-            </motion.div>
+          {/* Sticky container for QuizShowcase */}
+          <div className="sticky top-0 left-0 right-0 h-screen w-full overflow-hidden z-10">
+            <QuizShowcase scrollYProgress={quizScrollProgress} />
           </div>
-        </section>
+
+          {/* Spacer to allow scrolling through the QuizShowcase animations (300vh total, minus 100vh viewport height = 200vh spacer) */}
+          <div style={{ height: "200vh" }} className="pointer-events-none" />
+
+          {/* ═══════ Progress preview ═══════
+              relative + z-20 + solid bg-background: this section is a normal
+              (non-pinned) block that sits later in normal document flow. Because
+              it has a higher stacking context (z-20) than QuizShowcase's sticky
+              layer (z-10) and an opaque background, it visually slides up and
+              covers QuizShowcase as the user scrolls past the pinned 300vh
+              scroll distance.
+              
+              We enforce min-h-screen to ensure the parent container is tall enough
+              that the sticky QuizShowcase remains stationary until Progress Preview
+              completely covers the viewport. */}
+          <section className="relative z-20 min-h-screen py-28 bg-background">
+            <div className="mx-auto max-w-7xl px-6">
+              <motion.div variants={slideLeft} initial="hidden" whileInView="visible" viewport={vp}>
+                <SectionHead kicker="Progress" title="Lihat seberapa jauh perjalananmu." link="/progress" cta="Buka Dashboard" />
+              </motion.div>
+
+              {/* Card scales in from center */}
+              <motion.div variants={scaleIn} initial="hidden" whileInView="visible" viewport={vp}>
+                <div className="relative overflow-hidden rounded-3xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-sm p-12">
+                  <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
+
+                  {/* Stats stagger in one by one */}
+                  <motion.div
+                    variants={stagger}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    className="grid sm:grid-cols-4 gap-8 text-center"
+                  >
+                    {[
+                      { v: "0/16", l: "Tenses dikuasai" },
+                      { v: "0%", l: "Skor rata-rata" },
+                      { v: "0", l: "Cerita selesai" },
+                      { v: "0", l: "Streak hari" },
+                    ].map((s) => (
+                      <motion.div key={s.l} variants={fadeUp}>
+                        <div className="text-4xl heading-editorial text-accent">{s.v}</div>
+                        <div className="mt-2 text-xs uppercase tracking-[0.15em] text-muted-foreground font-medium">{s.l}</div>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                </div>
+              </motion.div>
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   );

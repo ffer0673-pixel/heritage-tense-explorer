@@ -749,8 +749,6 @@ if (/Haven't\/Hasn't/.test(negativeInterrogative)) {
 }
 
 return { pronoun, positive, negative, interrogative, negativeInterrogative };
-
-    return { pronoun, positive, negative, interrogative };
   });
 }
 

@@ -94,4 +94,21 @@ export const STORIES: Story[] = [
       { sentence: "The future she had feared had not arrived.", tense: "Past Perfect", explanation: "Describes something that had not happened before another past reference point." },
     ],
   },
+  {
+    slug: "kuliner-tangerang",
+    title: "Kuliner Tangerang",
+    summary: "Tangerang cuisine fuses Sundanese, Chinese, and Betawi flavors — laksa, sayur besan, and dodol.",
+    cover: "🍜",
+    image: "/kulinertangerang.png",
+    tenseFocus: "Present Perfect & Simple Present",
+    body: [
+      "We are sitting at a wooden table in Pasar Lama, surrounded by the steam of boiling laksa broth. The aroma of roasted coconut and coriander fills the air as the chef prepares our bowls.",
+      "Tangerang's culinary heritage tells the story of centuries of cultural fusion. Every bowl of Laksa Tangerang combines local Sundanese rice noodles with Chinese spices and Betawi style gravy.",
+      "By the time we finish our sayur besan and sweet, sticky dodol, we will have experienced a true taste of Tangerang's Peranakan history.",
+    ],
+    analysis: [
+      { sentence: "The aroma of roasted coconut and coriander fills the air.", tense: "Simple Present", explanation: "Describes a general sensory fact in the story." },
+      { sentence: "We will have experienced a true taste of Tangerang's history.", tense: "Future Perfect", explanation: "An action that will be completed before a future point." },
+    ],
+  },
 ];
