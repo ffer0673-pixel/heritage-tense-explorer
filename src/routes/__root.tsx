@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -15,6 +16,9 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { ThemeApplier } from "@/components/ThemeApplier";
+import SvgSymbols from "@/components/truus/SvgSymbols";
+import CursorBubble from "@/components/truus/CursorBubble";
+import "@/styles/truus/globals.css";
 
 function NotFoundComponent() {
   return (
@@ -108,17 +112,20 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isHome = pathname === "/";
 
   return (
     <QueryClientProvider client={queryClient}>
-      
+      <SvgSymbols />
       <SmoothScroll />
+      <CursorBubble />
       <div className="min-h-screen flex flex-col">
         <Navbar />
         <main className="flex-1">
           <Outlet />
         </main>
-        <Footer />
+        {isHome && <Footer />}
       </div>
     </QueryClientProvider>
   );

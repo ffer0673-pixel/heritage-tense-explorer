@@ -20,7 +20,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/cerita", changefreq: "monthly", priority: "0.7" },
           { path: "/progress", changefreq: "monthly", priority: "0.5" },
           { path: "/reference", changefreq: "monthly", priority: "0.4" },
-          ...TENSES.map<SitemapEntry>((t) => ({ path: `/tenses/${t.slug}`, changefreq: "monthly", priority: "0.7" })),
+          ...TENSES.map<SitemapEntry>((t) => ({ path: `/formula/${t.slug}`, changefreq: "monthly", priority: "0.7" })),
           ...STORIES.map<SitemapEntry>((s) => ({ path: `/cerita/${s.slug}`, changefreq: "monthly", priority: "0.6" })),
         ];
 

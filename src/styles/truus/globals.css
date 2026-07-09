@@ -1,0 +1,18 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   src/styles/truus/globals.css — Entry point. Imports all partial stylesheets.
+───────────────────────────────────────────────────────────────────────────── */
+
+@import './base.css';
+@import './shared.css';
+@import './navbar.css';
+@import './hero.css';
+@import './motion-cards.css';
+@import './showreel.css';
+@import './cards.css';
+@import './quiz.css';
+@import './marquee.css';
+@import './footer.css';
+@import './vimeo-hero.css';
+@import './cursor.css';
+@import './responsive.css';
+@import './horizontal-words.css';

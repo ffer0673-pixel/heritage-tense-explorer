@@ -1,0 +1,502 @@
+/* ─── Navbar & Header ───────────────────────────────────────────────────────── */
+.main-header {
+    width: 100%;
+}
+
+.logo-work-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 55px;
+}
+
+.nav-bar__work-blob-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.logo-work-text {
+    position: relative;
+    z-index: 2;
+    font-family: 'Epilogue', sans-serif;
+    font-weight: 800;
+    font-size: 2rem;
+    margin-left: 60px;
+    color: inherit;
+    letter-spacing: -0.5px;
+    transition: color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px 40px;
+    background: transparent;
+    z-index: 1000;
+    transition: color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar.on-dark {
+    color: var(--bg-color);
+}
+
+.navbar.on-light {
+    color: var(--color-dark);
+}
+
+.nav-bar__whatsapp-svg {
+    width: 32px;
+    height: auto;
+    display: block;
+    color: inherit;
+}
+
+
+/* VimeoHero sits directly inside main-header — no extra wrapper needed */
+.main-header {
+    width: 100%;
+    position: relative;
+}
+
+/* ─── Full-screen dark overlay when navbar popout is open ─── */
+.nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 99;
+    /* Just below the popout (z-index: 100) */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.nav-hover-trigger {
+    position: relative;
+}
+
+.nav-popout {
+    position: absolute;
+    background: var(--bg-color);
+    /* Off-white beige from image */
+    color: var(--color-dark);
+    border-radius: 16px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.nav-popout-inner {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-hover-trigger:hover .nav-popout {
+    pointer-events: auto;
+}
+
+/* Base text styling */
+.nav-popout h4,
+.nav-popout p,
+.nav-popout a {
+    font-family: 'Epilogue', sans-serif;
+    margin: 0;
+}
+
+/* --- Left Popout (Work) --- */
+.nav-left .nav-popout {
+    top: 8px;
+    left: -8px;
+    width: 320px;
+    height: 500px;
+}
+
+.nav-left .nav-popout-inner {
+    width: 100%;
+    height: 100%;
+    padding: 100px 24px 24px 24px;
+    /* Space for the Work logo at the top */
+    gap: 20px;
+}
+
+.nav-left .logo-work-container {
+    position: relative;
+    z-index: 105;
+    /* Keeps logo ABOVE the popout background */
+}
+
+/* Force text dark when hovering, since popout bg is light */
+.nav-left:hover .logo-work-text {
+    color: var(--color-dark) !important;
+}
+
+/* The work items layout */
+.nav-work-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    text-decoration: none;
+    color: inherit;
+    cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+}
+
+/* Image clip wrapper — tilt stays inside bounds */
+.nav-work-item__img-wrap {
+    width: 75px;
+    height: 75px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.nav-work-item__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.nav-work-item__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-top: 2px;
+}
+
+.nav-work-badge {
+    font-size: 1.05rem;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border-bottom-left-radius: 1px;
+    width: fit-content;
+}
+
+.badge-maroon {
+    background-color: #B1536E;
+    /* Deep maroon/pink */
+    color: var(--color-dark);
+}
+
+.badge-pink {
+    background-color: #EBB6F4;
+    /* Light pink */
+    color: var(--color-dark);
+}
+
+.nav-work-title {
+    margin-top: 50px;
+    font-size: 1.3rem;
+    font-weight: 650;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+}
+
+.nav-work-btn {
+    display: block;
+    text-align: center;
+    background-color: var(--color-black);
+    color: var(--color-white);
+    padding: 20px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1.4rem;
+    text-decoration: none;
+    margin-top: 10rem;
+    cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+}
+
+/* --- Right Popout (WhatsApp) --- */
+.nav-right .nav-popout {
+    top: 8px;
+    right: -8px;
+}
+
+.nav-right .nav-popout-inner {
+    width: 320px;
+    padding: 100px 24px 24px 24px;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+}
+
+.nav-right .logo-whatsapp {
+    position: relative;
+    z-index: 105;
+}
+
+
+.nav-wa-qr {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    top: -60px;
+    border-radius: 0px;
+    object-fit: cover;
+}
+
+.nav-wa-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    text-transform: lowercase;
+    margin-top: -40px;
+}
+
+.nav-wa-desc {
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.35;
+    opacity: 1;
+    margin-bottom: 28px;
+    /* Large gap to the link */
+}
+
+.nav-wa-link {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.25rem;
+    font-weight: 800;
+    text-decoration: none;
+    color: inherit;
+    cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+    padding-bottom: 18px;
+    /* Room for the two SVG lines below */
+}
+
+.nav-wa-link-text {
+    z-index: 2;
+}
+
+.nav-wa-link-svg {
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+    height: 14px;
+    /* Taller to fit both paths */
+}
+
+.nav-wa-link-svg path {
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    transition: stroke-dashoffset 0.5s ease-out;
+}
+
+.nav-hover-trigger:hover .nav-wa-link-svg path {
+    stroke-dashoffset: 0;
+    transition-delay: 0.15s;
+}
+
+/* ─── Redesigned Navbar Layout (Truus Style) ─── */
+.navbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    justify-items: stretch;
+    transition: background-color 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                backdrop-filter 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                padding 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                color 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.navbar--scrolled {
+    padding: 14px 40px;
+}
+
+.navbar.on-dark.navbar--scrolled {
+    background-color: rgba(10, 10, 10, 0.35);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.navbar.on-light.navbar--scrolled {
+    background-color: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+/* Desktop Menu Rows */
+.nav-menu-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 48px; /* Spacing between menu items: 40-56px */
+}
+
+/* Redesigned Menu Link Item */
+.nav-menu-item {
+    position: relative;
+    font-family: 'Epilogue', sans-serif;
+    font-weight: 700;
+    font-size: 1.55rem;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    text-transform: none;
+    text-decoration: none;
+    color: inherit;
+    padding: 6px 4px;
+    display: inline-block;
+    cursor: url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer !important;
+    transition: opacity 0.3s ease;
+    transform-origin: center center;
+}
+
+.nav-menu-item::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1.5px;
+    bottom: 0;
+    left: 0;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.nav-menu-item:hover::after,
+.nav-menu-item.active::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.nav-menu-item:hover {
+    opacity: 0.85;
+}
+
+/* Mobile Hamburger Trigger */
+.nav-hamburger {
+    display: none;
+    position: relative;
+    z-index: 1005;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    cursor: url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer !important;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 0;
+    color: inherit;
+    transition: transform 0.3s ease;
+}
+
+.nav-hamburger span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background-color: currentColor;
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+                opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+                background-color 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.nav-hamburger.open {
+    color: var(--color-white) !important;
+}
+
+.nav-hamburger.open span:nth-child(1) {
+    transform: translateY(3.5px) rotate(45deg);
+}
+
+.nav-hamburger.open span:nth-child(2) {
+    transform: translateY(-3.5px) rotate(-45deg);
+}
+
+/* Mobile Fullscreen Overlay */
+.nav-mobile-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: var(--color-black);
+    color: var(--color-white);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+                visibility 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.nav-mobile-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.nav-mobile-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+}
+
+.nav-mobile-item {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 3.2rem;
+    font-weight: 800;
+    text-transform: none;
+    text-decoration: none;
+    color: var(--color-white);
+    opacity: 0;
+    transform: translateY(28px);
+    cursor: url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer !important;
+    transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+                transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.nav-mobile-item.active {
+    opacity: 0.5 !important;
+}
+
+.nav-mobile-overlay.open .nav-mobile-item {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.nav-mobile-overlay.open .nav-mobile-item:nth-child(1) { transition-delay: 0.1s; }
+.nav-mobile-overlay.open .nav-mobile-item:nth-child(2) { transition-delay: 0.16s; }
+.nav-mobile-overlay.open .nav-mobile-item:nth-child(3) { transition-delay: 0.22s; }
+.nav-mobile-overlay.open .nav-mobile-item:nth-child(4) { transition-delay: 0.28s; }
+.nav-mobile-overlay.open .nav-mobile-item:nth-child(5) { transition-delay: 0.34s; }
+
+/* Responsive Media Queries */
+@media (max-width: 1023px) {
+    .nav-menu-left,
+    .nav-menu-right {
+        display: none;
+    }
+    .navbar {
+        display: flex;
+        justify-content: flex-end;
+        padding: 16px 24px;
+    }
+    .navbar--scrolled {
+        padding: 12px 24px;
+    }
+    .nav-hamburger {
+        display: flex;
+    }
+}

@@ -1,0 +1,217 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   src/styles/truus/shared.css — Shared UI Components & Design Tokens
+   Consolidates reusable presentational styles to ensure global consistency.
+───────────────────────────────────────────────────────────────────────────── */
+
+/* ─── Shared Buttons ─────────────────────────────────────────────────────── */
+.truus-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: var(--color-dark);
+    color: var(--color-white);
+    padding: 12px 28px;
+    border-radius: 24px;
+    font-family: 'Epilogue', sans-serif;
+    font-weight: 800;
+    font-size: 1.05rem;
+    text-transform: lowercase;
+    text-decoration: none;
+    border: none;
+    outline: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.2s ease, opacity 0.2s ease;
+    cursor: url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer !important;
+}
+
+.truus-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+.truus-btn:active {
+    transform: translateY(1px) scale(0.98);
+}
+
+.truus-btn:disabled {
+    opacity: 0.4;
+    transform: none !important;
+    box-shadow: none !important;
+    cursor: not-allowed !important;
+}
+
+/* Light outline variant */
+.truus-btn-outline {
+    background: none;
+    border: 2px solid var(--color-dark);
+    color: var(--color-dark);
+    box-shadow: none;
+}
+
+.truus-btn-outline:hover {
+    background-color: var(--color-dark);
+    color: var(--color-white);
+}
+
+/* ─── Shared Cards ───────────────────────────────────────────────────────── */
+.truus-card {
+    background-color: var(--color-white);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.truus-card-interactive {
+    cursor: url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer !important;
+}
+
+.truus-card-interactive:hover {
+    transform: translateY(-5px) rotate(0.4deg);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+}
+
+/* Color Variant Cards */
+.truus-card-green {
+    background-color: var(--color-green);
+    color: var(--color-white);
+}
+.truus-card-lightblue {
+    background-color: var(--color-lightblue);
+    color: var(--color-dark);
+}
+.truus-card-orange {
+    background-color: var(--color-orange);
+    color: var(--color-dark);
+}
+.truus-card-maroon {
+    background-color: var(--color-maroon);
+    color: var(--color-white);
+}
+.truus-card-pink {
+    background-color: var(--color-pink);
+    color: var(--color-dark);
+}
+.truus-card-darkblue {
+    background-color: var(--color-darkblue);
+    color: var(--color-white);
+}
+
+/* ─── Badges & Status Indicators ─────────────────────────────────────────── */
+.truus-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--color-dark);
+}
+
+.truus-badge-accent {
+    background-color: var(--color-orange);
+    color: var(--color-white);
+}
+
+.truus-badge-success {
+    background-color: #bbf7d0;
+    color: #15803d;
+}
+
+/* ─── Thin Editorial Progress Bar ───────────────────────────────────────── */
+.truus-progress-bg {
+    height: 6px;
+    width: 100%;
+    background-color: #e5e5e5;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.truus-progress-fill {
+    height: 100%;
+    background-color: var(--color-dark);
+    transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* ─── Text Inputs ────────────────────────────────────────────────────────── */
+.truus-input {
+    width: 100%;
+    background-color: var(--color-white);
+    border: 2px solid var(--color-dark);
+    border-radius: 16px;
+    padding: 12px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.1rem;
+    color: var(--color-dark);
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.truus-input:focus {
+    border-color: var(--color-darkblue);
+    box-shadow: 0 0 0 3px rgba(75, 105, 240, 0.15);
+}
+
+/* ─── Editorial Header / Title Unders ───────────────────────────────────── */
+.truus-editorial-title {
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.truus-editorial-title h1 {
+    font-size: 4.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -2px;
+    text-transform: lowercase;
+}
+
+.truus-title-underline {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 240px;
+    height: auto;
+    color: var(--color-orange);
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: drawTitleUnderline 1.2s forwards ease-in-out;
+}
+
+@keyframes drawTitleUnderline {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* ─── Empty & Error States ──────────────────────────────────────────────── */
+.truus-empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background-color: var(--color-white);
+    border-radius: 24px;
+    border: 2px dashed rgba(0, 0, 0, 0.1);
+}
+
+.truus-empty-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.truus-empty-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.05rem;
+    color: #64748b;
+    margin-bottom: 24px;
+}

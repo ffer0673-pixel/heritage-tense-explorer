@@ -17,8 +17,8 @@ import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as CeritaRouteImport } from './routes/cerita'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as TensesTenseRouteImport } from './routes/tenses_.$tense'
 import { Route as QuizQuizIdRouteImport } from './routes/quiz_.$quizId'
+import { Route as FormulaTenseRouteImport } from './routes/formula_.$tense'
 import { Route as CeritaSlugRouteImport } from './routes/cerita_.$slug'
 
 const TensesRoute = TensesRouteImport.update({
@@ -61,14 +61,14 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TensesTenseRoute = TensesTenseRouteImport.update({
-  id: '/tenses_/$tense',
-  path: '/tenses/$tense',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const QuizQuizIdRoute = QuizQuizIdRouteImport.update({
   id: '/quiz_/$quizId',
   path: '/quiz/$quizId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FormulaTenseRoute = FormulaTenseRouteImport.update({
+  id: '/formula_/$tense',
+  path: '/formula/$tense',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CeritaSlugRoute = CeritaSlugRouteImport.update({
@@ -87,8 +87,8 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tenses': typeof TensesRoute
   '/cerita/$slug': typeof CeritaSlugRoute
+  '/formula/$tense': typeof FormulaTenseRoute
   '/quiz/$quizId': typeof QuizQuizIdRoute
-  '/tenses/$tense': typeof TensesTenseRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -100,8 +100,8 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tenses': typeof TensesRoute
   '/cerita/$slug': typeof CeritaSlugRoute
+  '/formula/$tense': typeof FormulaTenseRoute
   '/quiz/$quizId': typeof QuizQuizIdRoute
-  '/tenses/$tense': typeof TensesTenseRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -114,8 +114,8 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tenses': typeof TensesRoute
   '/cerita_/$slug': typeof CeritaSlugRoute
+  '/formula_/$tense': typeof FormulaTenseRoute
   '/quiz_/$quizId': typeof QuizQuizIdRoute
-  '/tenses_/$tense': typeof TensesTenseRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -129,8 +129,8 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/tenses'
     | '/cerita/$slug'
+    | '/formula/$tense'
     | '/quiz/$quizId'
-    | '/tenses/$tense'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -142,8 +142,8 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/tenses'
     | '/cerita/$slug'
+    | '/formula/$tense'
     | '/quiz/$quizId'
-    | '/tenses/$tense'
   id:
     | '__root__'
     | '/'
@@ -155,8 +155,8 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/tenses'
     | '/cerita_/$slug'
+    | '/formula_/$tense'
     | '/quiz_/$quizId'
-    | '/tenses_/$tense'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -169,8 +169,8 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TensesRoute: typeof TensesRoute
   CeritaSlugRoute: typeof CeritaSlugRoute
+  FormulaTenseRoute: typeof FormulaTenseRoute
   QuizQuizIdRoute: typeof QuizQuizIdRoute
-  TensesTenseRoute: typeof TensesTenseRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -231,18 +231,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tenses_/$tense': {
-      id: '/tenses_/$tense'
-      path: '/tenses/$tense'
-      fullPath: '/tenses/$tense'
-      preLoaderRoute: typeof TensesTenseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/quiz_/$quizId': {
       id: '/quiz_/$quizId'
       path: '/quiz/$quizId'
       fullPath: '/quiz/$quizId'
       preLoaderRoute: typeof QuizQuizIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/formula_/$tense': {
+      id: '/formula_/$tense'
+      path: '/formula/$tense'
+      fullPath: '/formula/$tense'
+      preLoaderRoute: typeof FormulaTenseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cerita_/$slug': {
@@ -265,8 +265,8 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TensesRoute: TensesRoute,
   CeritaSlugRoute: CeritaSlugRoute,
+  FormulaTenseRoute: FormulaTenseRoute,
   QuizQuizIdRoute: QuizQuizIdRoute,
-  TensesTenseRoute: TensesTenseRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

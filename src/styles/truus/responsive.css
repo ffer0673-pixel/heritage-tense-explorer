@@ -1,0 +1,248 @@
+/* ─── Tablet (769px – 1200px) ────────────────────────────────────────────── */
+@media (min-width: 769px) and (max-width: 1200px) {
+    .cards-wrapper {
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 50px;
+        padding-bottom: 50px;
+        gap: 30px;
+        overflow: visible;
+    }
+
+    .card {
+        position: relative;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+        width: 90%;
+        max-width: 400px;
+        height: auto;
+        min-height: 400px;
+        margin-bottom: 20px;
+    }
+}
+
+/* ─── Medium screens (≤ 900px) ───────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .footer-top {
+        flex-direction: column;
+        gap: 60px;
+    }
+
+    .footer-column h3,
+    .footer-column address,
+    .footer-email {
+        font-size: 1.5rem;
+    }
+
+    .footer-big-text {
+        font-size: 40vw;
+    }
+}
+
+/* ─── Mobile (≤ 768px) ───────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+    /* ── Navbar ─────────────────────── */
+    .navbar {
+        padding: 14px 16px;
+    }
+
+    .logo-truus {
+        width: 100px;
+    }
+
+    .logo-work-container {
+        width: 48px;
+        height: 44px;
+    }
+
+    .logo-work-text {
+        font-size: 1.4rem;
+        margin-left: 52px;
+    }
+
+    .nav-bar__whatsapp-svg {
+        width: 26px;
+    }
+
+    /* ── Header Hero ────────────────── */
+    .header-content {
+        height: 100svh;
+        padding: 0 24px;
+        text-align: center;
+    }
+
+    .header-content h1 {
+        font-size: 2rem;
+    }
+
+    /* ── Content / Hero Title ───────── */
+    .content-section {
+        padding: 80px 0 0;
+        overflow: visible;
+    }
+
+    .main-title {
+        font-size: 3rem;
+        letter-spacing: -2px;
+    }
+
+    .title-underline-svg {
+        width: 100px;
+        bottom: -10px;
+    }
+
+    .title-container {
+        margin-bottom: 50px;
+    }
+
+    /* ── Cards (GSAP-controlled) ─────── */
+    .cards-wrapper {
+        position: relative !important;
+        display: block !important;
+        width: 100% !important;
+        margin: 0 auto !important;
+        overflow: visible !important;
+    }
+
+    .card {
+        width: 82vw;
+        max-width: 340px;
+        min-height: 420px;
+        height: auto;
+    }
+
+    .card-sticker {
+        pointer-events: none;
+    }
+
+    /* ── Arc Conveyor Gallery (mobile) ── */
+    .double-marquee-section {
+        padding: 40px 0 60px;
+    }
+
+    .arc-gallery-viewport {
+        padding: 80px 0 40px;
+    }
+
+    .arc-gallery-track .marquee-item.heritage-card {
+        width: 160px;
+        height: 240px;
+    }
+
+    .marquee-heading-center h2 {
+        font-size: 2.8rem;
+        letter-spacing: -1.5px;
+    }
+
+    /* ── Footer ─────────────────────── */
+    .main-footer {
+        padding: 6px;
+    }
+
+    .footer-inner {
+        padding: 50px 20px 30px;
+        border-radius: 14px;
+        min-height: 100svh;
+    }
+
+    .footer-top {
+        flex-direction: column;
+        gap: 36px;
+    }
+
+    .footer-column h3 {
+        font-size: 1.4rem;
+        letter-spacing: -0.5px;
+    }
+
+    .footer-column address {
+        font-size: 1.25rem;
+    }
+
+    .footer-email {
+        font-size: 1.3rem;
+    }
+
+    .footer-whatsapp {
+        font-size: 1.1rem;
+        margin-top: -6px;
+    }
+
+    .footer-map-link {
+        font-size: 0.95rem;
+    }
+
+    /* ── Footer Stickers (mobile) ──── */
+    .sticker-boom {
+        left: 2%;
+        bottom: 10%;
+        width: 90px;
+    }
+
+    .sticker-smiley {
+        left: 30%;
+        bottom: 5%;
+        width: 90px;
+    }
+
+    .sticker-heart {
+        left: 50%;
+        bottom: 18%;
+        width: 85px;
+    }
+
+    .footer-sticker.sticker-hands {
+        left: 60%;
+        bottom: 2%;
+        width: 90px;
+    }
+
+    .footer-sticker.sticker-100 {
+        left: 72%;
+        bottom: 20%;
+        width: 80px;
+    }
+
+    .footer-sticker.sticker-camera {
+        right: 2%;
+        bottom: 8%;
+        width: 85px;
+    }
+
+    /* ── Footer wordmark ────────────── */
+    .footer-bottom {
+        margin-top: 200px;
+    }
+
+    .footer-logo__svg {
+        width: 110%;
+        margin-left: -5%;
+    }
+
+    /* ── Credits badge ──────────────── */
+    .footer-credits-wrapper {
+        margin-right: -15px;
+        margin-bottom: -15px;
+    }
+
+    .footer-credits {
+        font-size: 0.75rem;
+    }
+
+    .credits-box {
+        padding: 16px 20px;
+        gap: 20px;
+    }
+
+    .credits-label {
+        font-size: 0.85rem;
+    }
+
+    .credits-name {
+        font-size: 0.95rem;
+    }
+}

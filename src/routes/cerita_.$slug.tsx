@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Check, X, Volume2, Square } from "lucide-react";
 import { STORIES } from "@/data/stories";
 import { useProgress } from "@/lib/progress-store";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/cerita_/$slug")({
   loader: ({ params }) => {
@@ -82,36 +83,37 @@ function StoryPage() {
   }, []);
 
   function toggleNarration() {
-  if (typeof window === "undefined" || !window.speechSynthesis) return;
-  if (isSpeaking) {
-    window.speechSynthesis.cancel();
-    setIsSpeaking(false);
-    return;
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+    const fullText = story.body.join(" ");
+    const utterance = new SpeechSynthesisUtterance(fullText);
+    utterance.lang = "en-US";
+    utterance.rate = 0.95;
+
+    const voices = window.speechSynthesis.getVoices();
+    const femaleVoice =
+      voices.find((v) => v.lang.startsWith("en") && /female|zira|samantha|susan|karen|moira|tessa/i.test(v.name)) ||
+      voices.find((v) => v.lang === "en-US" && v.name.toLowerCase().includes("female")) ||
+      voices.find((v) => v.lang.startsWith("en"));
+    if (femaleVoice) utterance.voice = femaleVoice;
+
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+    utteranceRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
+    setIsSpeaking(true);
   }
-  const fullText = story.body.join(" ");
-  const utterance = new SpeechSynthesisUtterance(fullText);
-  utterance.lang = "en-US";
-  utterance.rate = 0.95;
-
-  const voices = window.speechSynthesis.getVoices();
-  const femaleVoice =
-    voices.find((v) => v.lang.startsWith("en") && /female|zira|samantha|susan|karen|moira|tessa/i.test(v.name)) ||
-    voices.find((v) => v.lang === "en-US" && v.name.toLowerCase().includes("female")) ||
-    voices.find((v) => v.lang.startsWith("en"));
-  if (femaleVoice) utterance.voice = femaleVoice;
-
-  utterance.onend = () => setIsSpeaking(false);
-  utterance.onerror = () => setIsSpeaking(false);
-  utteranceRef.current = utterance;
-  window.speechSynthesis.speak(utterance);
-  setIsSpeaking(true);
-}
 
   function pick(t: string) {
     if (picked) return;
     setPicked(t);
     if (t === cur.tense) setScore((s) => s + 1);
   }
+  
   function next() {
     setPicked(null);
     if (step + 1 >= analysis.length) {
@@ -123,73 +125,86 @@ function StoryPage() {
   const progressPercent = showQuiz && !done ? Math.round((step / analysis.length) * 100) : done ? 100 : 0;
 
   return (
-    <div className="pt-32 pb-20">
-      <div className="mx-auto max-w-3xl px-6">
-        <Link to="/cerita" className="text-sm text-muted-foreground hover:text-foreground">← Semua cerita</Link>
+    <div className="quiz-runner-container">
+      <div className="quiz-runner-card">
+        {/* Decal stickers */}
+        <img
+          src="/assets/Card-Sticker SVG/sticker-smiley.svg"
+          className="quiz-runner-decor quiz-decor-smiley"
+          alt=""
+          loading="lazy"
+        />
+        <img
+          src="/assets/Card-Sticker SVG/sticker-heart.svg"
+          className="quiz-runner-decor quiz-decor-star"
+          alt=""
+          loading="lazy"
+        />
 
-        <div className="mt-6 flex items-start justify-between gap-4">
-          <div className="text-7xl">
-            {story.image ? (
-              <img
-                src={story.image}
-                alt={story.title}
-                className="w-24 h-24 object-cover rounded-xl"
-              />
-            ) : (
-              story.cover
-            )}
-          </div>
-          <button
-            onClick={toggleNarration}
-            aria-label={isSpeaking ? "Stop narration" : "Play narration"}
-            className="shrink-0 inline-flex items-center gap-2 rounded-full glass px-4 py-2.5 text-sm font-medium hover:shadow-glow transition-all"
-          >
-            {isSpeaking ? (
-              <>
-                <Square className="h-4 w-4" /> Stop
-              </>
-            ) : (
-              <>
-                <Volume2 className="h-4 w-4" /> Dengarkan
-              </>
-            )}
-          </button>
+        <div className="quiz-runner-meta">
+          <Link to="/cerita" className="quiz-runner-back">← Semua cerita</Link>
+          {showQuiz && !done && <span>{step + 1} / {analysis.length}</span>}
         </div>
 
-        <h1 className="mt-4 font-serif italic text-4xl sm:text-5xl tracking-tight">{story.title}</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Tense focus: {story.tenseFocus}</p>
-
-        <article className="font-serif text-lg leading-[1.85] mt-10 space-y-6 text-foreground/90">
-          {story.body.map((p, i) => (
-            <p key={i}>{p}</p>
-          ))}
-        </article>
+        {showQuiz && !done && (
+          <div className="quiz-progress-bar-bg">
+            <div className="quiz-progress-bar-fill" style={{ width: `${progressPercent}%` }} />
+          </div>
+        )}
 
         {!showQuiz && !done && (
-          <button
-            onClick={() => setShowQuiz(true)}
-            className="mt-12 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground"
-          >
-            Mulai analisis tense <ArrowRight className="h-4 w-4" />
-          </button>
+          <div className="pt-4">
+            <div className="flex items-start justify-between gap-4 flex-wrap">
+              <div className="text-7xl">
+                {story.image ? (
+                  <img
+                    src={story.image}
+                    alt={story.title}
+                    className="w-24 h-24 object-cover rounded-2xl shadow-sm"
+                  />
+                ) : (
+                  <div className="w-24 h-24 bg-muted rounded-2xl flex items-center justify-center text-4xl">{story.cover}</div>
+                )}
+              </div>
+              <button
+                onClick={toggleNarration}
+                aria-label={isSpeaking ? "Stop narration" : "Play narration"}
+                className="truus-btn truus-btn-outline shrink-0"
+              >
+                {isSpeaking ? (
+                  <>
+                    <Square className="h-4 w-4" /> Stop
+                  </>
+                ) : (
+                  <>
+                    <Volume2 className="h-4 w-4" /> Dengarkan
+                  </>
+                )}
+              </button>
+            </div>
+
+            <h1 className="quiz-runner-question mt-6 mb-2">{story.title}</h1>
+            <div className="text-xs uppercase tracking-widest text-muted-foreground font-semibold mb-8">Tense focus: {story.tenseFocus}</div>
+
+            <article className="font-serif text-lg leading-[1.85] space-y-6 text-foreground/90 max-w-2xl border-t border-border pt-6">
+              {story.body.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </article>
+
+            <button
+              onClick={() => setShowQuiz(true)}
+              className="truus-btn mt-10"
+            >
+              Mulai analisis tense <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
         )}
 
         {showQuiz && !done && (
-          <section className="mt-14">
-            <div className="text-xs uppercase tracking-widest text-muted-foreground">Mini Analysis</div>
-            <h2 className="mt-2 text-xl font-semibold">Tense apa yang dipakai?</h2>
-            <div className="mt-2 flex items-center gap-3">
-              <span className="text-xs text-muted-foreground shrink-0">{step + 1} / {analysis.length}</span>
-              <div className="h-1.5 flex-1 rounded-full bg-muted overflow-hidden">
-                <motion.div
-                  className="h-full rounded-full bg-primary"
-                  initial={false}
-                  animate={{ width: `${progressPercent}%` }}
-                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                />
-              </div>
-              <span className="text-xs text-muted-foreground shrink-0">{progressPercent}%</span>
-            </div>
+          <section className="pt-4">
+            <div className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Mini Analysis</div>
+            <h2 className="text-xl font-bold mt-1 mb-6">Tense apa yang dipakai?</h2>
 
             <AnimatePresence mode="wait">
               <motion.div
@@ -197,42 +212,47 @@ function StoryPage() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.3 }}
-                className="mt-4 glass rounded-2xl p-6"
+                transition={{ duration: 0.25 }}
               >
-                <p className="font-serif italic text-lg">"{cur.sentence}"</p>
-                <div className="mt-5 grid sm:grid-cols-2 gap-2">
-                  {options.map((opt) => {
+                <p className="font-serif italic text-2xl mb-8 leading-snug">"{cur.sentence}"</p>
+                <div className="quiz-choices-grid">
+                  {options.map((opt, i) => {
+                    const isSelected = picked === opt;
                     const isCorrect = picked && opt === cur.tense;
                     const isWrong = picked === opt && opt !== cur.tense;
+                    
                     return (
                       <button
                         key={opt}
                         onClick={() => pick(opt)}
                         disabled={!!picked}
-                        className={`text-left rounded-xl border p-3 text-sm transition-colors
-                          ${isCorrect ? "border-success bg-success/10" : ""}
-                          ${isWrong ? "border-destructive bg-destructive/10" : ""}
-                          ${!picked ? "border-border hover:border-primary/40 hover:bg-primary-soft" : "border-border"}`}
+                        className={cn(
+                          "quiz-choice-btn",
+                          isWrong && "wrong",
+                          isCorrect && "correct",
+                          picked && opt === cur.tense && "correct",
+                          isSelected && "selected"
+                        )}
                       >
-                        <div className="flex items-center gap-2">
-                          {isCorrect && <Check className="h-4 w-4 text-success" />}
-                          {isWrong && <X className="h-4 w-4 text-destructive" />}
-                          <span>{opt}</span>
-                        </div>
+                        <span className="quiz-choice-badge">
+                          {String.fromCharCode(65 + i)}
+                        </span>
+                        <span>{opt}</span>
                       </button>
                     );
                   })}
                 </div>
+
                 {picked && (
-                  <div className="mt-4 rounded-xl bg-muted p-3 text-sm">
-                    <span className="font-semibold">Kenapa: </span>{cur.explanation}
+                  <div className="quiz-explanation-box">
+                    <span className="font-bold text-orange-600">Penjelasan: </span>{cur.explanation}
                   </div>
                 )}
+
                 {picked && (
-                  <div className="mt-4 flex justify-end">
-                    <button onClick={next} className="rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground">
-                      {step + 1 >= analysis.length ? "Selesai" : "Selanjutnya"}
+                  <div className="quiz-runner-footer">
+                    <button onClick={next} className="quiz-next-btn">
+                      {step + 1 >= analysis.length ? "Selesai" : "Selanjutnya"} <ArrowRight className="h-4 w-4" />
                     </button>
                   </div>
                 )}
@@ -242,22 +262,20 @@ function StoryPage() {
         )}
 
         {done && (
-          <section className="mt-14 text-center glass rounded-3xl p-10">
-            <div className="text-xs uppercase tracking-widest text-muted-foreground">Selesai</div>
-            <div className="mt-4 h-2 rounded-full bg-muted overflow-hidden max-w-xs mx-auto">
-              <motion.div
-                className="h-full rounded-full bg-success"
-                initial={{ width: 0 }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              />
+          <div className="quiz-done-container pt-8">
+            <div className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Selesai</div>
+            <h2 className="quiz-done-title mt-2">Analisis Tense Selesai</h2>
+            <div className="mt-8 inline-flex items-baseline gap-2">
+              <span className="quiz-percent-large">{Math.round((score / analysis.length) * 100)}</span>
+              <span className="text-2xl text-muted-foreground">%</span>
             </div>
-            <div className="heading-display text-6xl mt-5 text-primary">{score}<span className="text-2xl text-muted-foreground">/{analysis.length}</span></div>
-            <p className="mt-3 text-sm text-muted-foreground">Mantap. Lanjut cerita lain?</p>
-            <Link to="/cerita" className="mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground">
-              Kembali ke Cerita
-            </Link>
-          </section>
+            <div className="mt-2 text-sm text-muted-foreground font-semibold">{score} dari {analysis.length} jawaban benar</div>
+            <div className="quiz-btn-group mt-10">
+              <Link to="/cerita" className="quiz-action-btn-dark">
+                Kembali ke Cerita
+              </Link>
+            </div>
+          </div>
         )}
       </div>
     </div>

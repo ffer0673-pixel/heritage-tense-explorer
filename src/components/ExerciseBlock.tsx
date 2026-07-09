@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, X, RotateCcw } from "lucide-react";
+import { Check, X, RotateCcw, ArrowRight } from "lucide-react";
 import { shuffle } from "@/lib/shuffle";
 import type { QuizQuestion } from "@/data/quizzes";
+import { cn } from "@/lib/utils";
 
 interface ExerciseBlockProps {
   questions: QuizQuestion[];
@@ -24,7 +25,7 @@ export function ExerciseBlock({ questions, onDone }: ExerciseBlockProps) {
 
   const q = shuffled[step];
   if (!q) {
-    return <div className="glass rounded-2xl p-6 text-sm text-muted-foreground">Memuat soal…</div>;
+    return <div className="quiz-runner-card text-center text-muted-foreground p-6">Memuat soal…</div>;
   }
 
   function pick(i: number) {
@@ -51,24 +52,29 @@ export function ExerciseBlock({ questions, onDone }: ExerciseBlockProps) {
 
   if (done) {
     return (
-      <div className="glass rounded-2xl p-6 text-center">
-        <div className="text-xs uppercase tracking-widest text-muted-foreground">Latihan selesai</div>
-        <div className="heading-display text-5xl mt-3">{score}<span className="text-muted-foreground text-2xl">/{shuffled.length}</span></div>
-        <button onClick={reset} className="mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground">
-          <RotateCcw className="h-4 w-4" /> Coba lagi
-        </button>
+      <div className="quiz-final-card pt-10 pb-10 text-center max-w-xl mx-auto shadow-sm">
+        <div className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Latihan selesai</div>
+        <div className="mt-6 inline-flex items-baseline gap-1">
+          <span className="text-5xl font-extrabold text-foreground">{score}</span>
+          <span className="text-muted-foreground text-xl">/{shuffled.length}</span>
+        </div>
+        <div className="mt-6">
+          <button onClick={reset} className="truus-btn">
+            <RotateCcw className="h-4 w-4" /> Coba lagi
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="glass rounded-2xl p-6">
-      <div className="flex items-center justify-between text-xs text-muted-foreground">
+    <div className="quiz-final-card p-8 shadow-sm">
+      <div className="flex items-center justify-between text-xs text-muted-foreground font-semibold mb-4">
         <span>Soal {step + 1} / {shuffled.length}</span>
         <span>Skor: {score}</span>
       </div>
-      <div className="mt-2 h-1 w-full rounded-full bg-muted overflow-hidden">
-        <div className="h-full bg-primary transition-all" style={{ width: `${((step) / shuffled.length) * 100}%` }} />
+      <div className="quiz-progress-bar-bg mb-6">
+        <div className="quiz-progress-bar-fill" style={{ width: `${(step / shuffled.length) * 100}%` }} />
       </div>
 
       <AnimatePresence mode="wait" initial={false}>
@@ -77,11 +83,12 @@ export function ExerciseBlock({ questions, onDone }: ExerciseBlockProps) {
           initial={hydrated ? { opacity: 0, y: 12 } : false}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -12 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.25 }}
         >
-          <p className="mt-5 text-base font-medium">{q.prompt}</p>
-          <div className="mt-4 grid gap-2">
+          <p className="text-lg font-bold mb-6 leading-snug">"{q.prompt}"</p>
+          <div className="quiz-choices-grid">
             {q.options.map((opt, i) => {
+              const isSelected = picked === i;
               const isCorrect = picked !== null && i === q.correctIndex;
               const isWrongPick = picked === i && i !== q.correctIndex;
               return (
@@ -89,32 +96,34 @@ export function ExerciseBlock({ questions, onDone }: ExerciseBlockProps) {
                   key={i}
                   onClick={() => pick(i)}
                   disabled={picked !== null}
-                  className={`text-left rounded-xl border p-3 text-sm transition-colors
-                    ${isCorrect ? "border-success bg-success/10" : ""}
-                    ${isWrongPick ? "border-destructive bg-destructive/10" : ""}
-                    ${picked === null ? "border-border hover:border-primary/40 hover:bg-primary-soft" : "border-border"}`}
+                  className={cn(
+                    "quiz-choice-btn",
+                    isWrongPick && "wrong",
+                    isCorrect && "correct",
+                    picked !== null && i === q.correctIndex && "correct",
+                    isSelected && "selected"
+                  )}
                 >
-                  <div className="flex items-center gap-2">
-                    {isCorrect && <Check className="h-4 w-4 text-success" />}
-                    {isWrongPick && <X className="h-4 w-4 text-destructive" />}
-                    <span>{opt}</span>
-                  </div>
+                  <span className="quiz-choice-badge">
+                    {String.fromCharCode(65 + i)}
+                  </span>
+                  <span>{opt}</span>
                 </button>
               );
             })}
           </div>
 
           {picked !== null && (
-            <div className="mt-4 rounded-xl bg-muted p-3 text-sm">
-              <span className="font-semibold">Penjelasan: </span>
+            <div className="quiz-explanation-box">
+              <span className="font-bold text-orange-600">Penjelasan: </span>
               {q.explanation}
             </div>
           )}
 
           {picked !== null && (
-            <div className="mt-4 flex justify-end">
-              <button onClick={next} className="rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground">
-                {step + 1 >= shuffled.length ? "Selesai" : "Soal berikutnya"}
+            <div className="quiz-runner-footer">
+              <button onClick={next} className="quiz-next-btn">
+                {step + 1 >= shuffled.length ? "Selesai" : "Soal berikutnya"} <ArrowRight className="h-4 w-4" />
               </button>
             </div>
           )}

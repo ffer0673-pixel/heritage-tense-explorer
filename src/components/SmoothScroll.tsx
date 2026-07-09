@@ -1,45 +1,52 @@
-import { useEffect } from "react";
-import Lenis from "lenis";
+'use client';
+
+import { useEffect } from 'react';
+import Lenis from 'lenis';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useRouterState } from "@tanstack/react-router";
 
 export function SmoothScroll() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+    const pathname = useRouterState({ select: (s) => s.location.pathname });
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) return;
+    useEffect(() => {
+        gsap.registerPlugin(ScrollTrigger);
 
-    const lenis = new Lenis({
-      duration: 0.8,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      lerp: 0.15,
-      smoothWheel: true,
-      touchMultiplier: 1.5,
-    });
-    (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothWheel: true,
+            touchMultiplier: 1.5,
+        });
 
-    let raf = 0;
-    const loop = (time: number) => {
-      lenis.raf(time);
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+        gsap.ticker.lagSmoothing(0);
 
-    return () => {
-      cancelAnimationFrame(raf);
-      lenis.destroy();
-      (window as unknown as { __lenis?: Lenis }).__lenis = undefined;
-    };
-  }, []);
+        // Dynamic Tab Title Change
+        const originalTitle = document.title;
+        const handleVisibility = () => {
+            document.title = document.hidden ? "Hey, over here!👋" : originalTitle;
+        };
+        document.addEventListener('visibilitychange', handleVisibility);
 
-  // Reset scroll on route change
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const lenis = (window as unknown as { __lenis?: Lenis }).__lenis;
-    if (lenis) lenis.scrollTo(0, { immediate: true });
-    else window.scrollTo(0, 0);
-  }, [pathname]);
+        // Store lenis on window so other components can access it
+        (window as any).__lenis = lenis;
 
-  return null;
+        return () => {
+            lenis.destroy();
+            document.removeEventListener('visibilitychange', handleVisibility);
+            delete (window as any).__lenis;
+        };
+    }, []);
+
+    // Reset scroll on route change
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+        const lenis = (window as any).__lenis;
+        if (lenis) lenis.scrollTo(0, { immediate: true });
+        else window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
 }

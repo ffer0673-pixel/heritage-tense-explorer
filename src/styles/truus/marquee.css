@@ -1,0 +1,277 @@
+/* ─── Double Marquee Section — Floema-style Arc Conveyor ─────────────────── */
+.double-marquee-section {
+    background-color: var(--bg-color);
+    padding: 60px 0 80px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ─── Fixed-size viewport (the "window" — never moves) ───────────────────── */
+.arc-gallery-viewport {
+    position: relative;
+    width: 100%;
+    /* card height + amplitude room above + bottom padding */
+    height: 460px;   /* 320 card + 70 arc-up + 70 visual breathing room */
+    overflow: hidden;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.arc-gallery-viewport:active {
+    cursor: grabbing;
+}
+
+/* ─── Per-card wrapper — receives imperative transform every frame ────────── */
+.arc-card-wrapper {
+    position: absolute;
+    /* Baseline sits at ARC_AMPLITUDE px from top so centre cards can float up */
+    top: 70px;
+    left: 0;
+    width: 220px;
+    height: 320px;
+    transform-origin: center bottom;
+    will-change: transform;
+}
+
+/* ─── Heritage Showcase Cards ────────────────────────────────────────────── */
+.marquee-item.heritage-card {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transition: box-shadow 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    background-color: var(--color-black-deep);
+}
+
+.marquee-item.heritage-card:hover {
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
+    z-index: 10;
+}
+
+.heritage-card__media {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.heritage-card__media .cover-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    pointer-events: none;
+}
+
+.marquee-item.heritage-card:hover .cover-image {
+    transform: scale(1.1);
+}
+
+/* Gradient overlay */
+.heritage-card__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.85) 0%,
+        rgba(0, 0, 0, 0.2) 55%,
+        rgba(0, 0, 0, 0) 100%
+    );
+    opacity: 0.5;
+    transition: opacity 0.5s ease;
+    z-index: 2;
+}
+
+.marquee-item.heritage-card:hover .heritage-card__overlay {
+    opacity: 1;
+}
+
+/* Location label */
+.heritage-card__name {
+    position: absolute;
+    bottom: 18px;
+    left: 18px;
+    color: var(--color-white);
+    font-family: 'Epilogue', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    z-index: 3;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+        opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+        transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.marquee-item.heritage-card:hover .heritage-card__name {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ─── Centered Heading ────────────────────────────────────────────────────── */
+.marquee-heading-center {
+    text-align: center;
+    padding: 48px 24px 0;
+    position: relative;
+}
+
+.marquee-heading-center h2 {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 4.5rem;
+    font-weight: 1000;
+    line-height: 0.95;
+    letter-spacing: -3px;
+    color: var(--color-black);
+    cursor: url("/assets/Cursor SVG/cursor-text.svg") 12 12, auto;
+}
+
+.marquee-heading-center .text-with {
+    font-family: 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 14px;
+}
+
+/* Decorative underline SVG beneath "Local Wisdom." */
+.marquee-underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    color: var(--color-black);
+}
+
+.marquee-subtitle-center {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.25rem;
+    color: var(--color-dark);
+    margin-top: 24px;
+    font-weight: 400;
+}
+
+/* ─── Tense Card styles for the Tenses Hub Page ──────────────────────────── */
+.tense-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    border-radius: 18px;
+    padding: 24px;
+    box-sizing: border-box;
+    position: relative;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    text-decoration: none;
+}
+
+.tense-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.tense-card-badge {
+    align-self: flex-start;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+.tense-card-badge.theme-dark {
+    background-color: rgba(0, 0, 0, 0.08);
+    color: var(--color-dark);
+}
+
+.tense-card-badge.theme-light {
+    background-color: rgba(255, 255, 255, 0.18);
+    color: var(--color-white);
+}
+
+.tense-card-name {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    margin: 20px 0;
+}
+
+.tense-card-arrow {
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+}
+
+.tense-card-arrow.theme-dark {
+    background-color: rgba(0, 0, 0, 0.08);
+    color: var(--color-dark);
+}
+
+.tense-card-arrow.theme-light {
+    background-color: rgba(255, 255, 255, 0.18);
+    color: var(--color-white);
+}
+
+/* Category colors */
+.tense-card-present {
+    background-color: var(--color-green);
+    color: var(--color-white);
+}
+
+.tense-card-past {
+    background-color: var(--color-darkblue);
+    color: var(--color-white);
+}
+
+.tense-card-future {
+    background-color: var(--color-orange);
+    color: var(--color-dark);
+}
+
+.tense-card-past-future {
+    background-color: var(--color-maroon);
+    color: var(--color-white);
+}
+
+/* ─── Tenses page: sticky pin wrapper ────────────────────────────────────── */
+/* Outer: tall enough to give the gallery enough scroll room                  */
+.tenses-pinned-outer {
+    position: relative;
+    width: 100%;
+    /* 420vh ≈ gallery scrollMultiplier 1.2 × 16 cards × 240px stride + viewport  */
+    height: 420vh;
+}
+
+/* Inner: pins itself to the top of the viewport for the duration of the     */
+/* outer container scroll, then releases automatically by the browser         */
+.tenses-sticky-inner {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--bg-color);
+}

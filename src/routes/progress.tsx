@@ -1,9 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { RotateCcw, Lock, Check, PlayCircle } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { useProgress } from "@/lib/progress-store";
 import { CATEGORIES, TENSES, tensesByCategory } from "@/data/tenses";
 import { STORIES } from "@/data/stories";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/progress")({
   head: () => ({
@@ -21,24 +23,29 @@ function Ring({ percent, color, size = 110, label, value }: { percent: number; c
   const r = size / 2 - 8;
   const c = 2 * Math.PI * r;
   return (
-    <div className="flex flex-col items-center">
-      <svg width={size} height={size} className="-rotate-90">
-        <circle cx={size / 2} cy={size / 2} r={r} stroke="currentColor" className="text-muted" strokeWidth={8} fill="none" />
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={r}
-          stroke={color}
-          strokeWidth={8}
-          fill="none"
-          strokeLinecap="round"
-          strokeDasharray={c}
-          strokeDashoffset={c * (1 - percent / 100)}
-          style={{ transition: "stroke-dashoffset 0.8s cubic-bezier(.22,1,.36,1)" }}
-        />
-      </svg>
-      <div className="mt-2 text-sm font-semibold">{value}</div>
-      <div className="text-[11px] uppercase tracking-widest text-muted-foreground">{label}</div>
+    <div className="flex flex-col items-center font-semibold text-center">
+      <div className="relative" style={{ width: size, height: size }}>
+        <svg width={size} height={size} className="-rotate-90">
+          <circle cx={size / 2} cy={size / 2} r={r} stroke="#e5e5e5" strokeWidth={8} fill="none" />
+          <circle
+            cx={size / 2}
+            cy={size / 2}
+            r={r}
+            stroke={color}
+            strokeWidth={8}
+            fill="none"
+            strokeLinecap="round"
+            strokeDasharray={c}
+            strokeDashoffset={c * (1 - percent / 100)}
+            style={{ transition: "stroke-dashoffset 0.8s cubic-bezier(.22,1,.36,1)" }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center flex-col">
+          <span className="text-xl font-extrabold text-foreground">{percent}%</span>
+        </div>
+      </div>
+      <div className="mt-3 text-sm font-bold text-foreground">{value}</div>
+      <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mt-0.5">{label}</div>
     </div>
   );
 }
@@ -63,105 +70,144 @@ function ProgressPage() {
   const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
   const storiesRead = Object.values(stories).filter((s) => s.read).length;
 
+  const stats = [
+    { v: `${completed}/${total}`, l: "Tenses dikuasai", color: "pink" },
+    { v: `${avg}%`, l: "Skor rata-rata", color: "green" },
+    { v: `${storiesRead}/${STORIES.length}`, l: "Cerita selesai", color: "lightblue" },
+    { v: `${streak}`, l: "Streak", color: "orange" },
+  ];
+
   return (
-    <div className="pt-32 pb-20 mx-auto max-w-7xl px-6">
+    <div className="quiz-hub-container">
       <Reveal>
-        <div className="flex items-end justify-between flex-wrap gap-4">
+        <div className="quiz-title-container flex items-end justify-between flex-wrap gap-6 border-b border-border pb-8">
           <div>
-            <div className="text-xs uppercase tracking-widest text-muted-foreground">Progress</div>
-            <h1 className="heading-display text-5xl sm:text-6xl mt-3">Perjalananmu.</h1>
+            <h1 className="quiz-main-title">
+              Perjalananmu. <span className="italic-text">kemajuan.</span>
+            </h1>
+            <svg xmlns="http://www.w3.org/2000/svg" width="280" viewBox="0 0 159 17" fill="none" className="quiz-title-underline-svg">
+              <path d="M1 12.1515C53.0771 5.7187 105.529 2.30552 158 1.93652" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
+              <path d="M30.2672 15.9461C64.1899 12.8158 98.2663 11.3583 132.33 11.5735" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
+            </svg>
           </div>
           <button
             onClick={() => {
               if (confirm("Reset semua progress? Tindakan ini tidak bisa di-undo.")) reset();
             }}
-            className="inline-flex items-center gap-2 rounded-full border border-destructive/30 text-destructive px-4 py-2 text-sm font-medium hover:bg-destructive/10 transition-colors"
+            className="truus-btn truus-btn-outline"
           >
             <RotateCcw className="h-4 w-4" /> Reset Progress
           </button>
         </div>
       </Reveal>
 
-      {/* Overview */}
+      {/* Overview Rings Card */}
       <Reveal>
-        <div className="mt-12 glass rounded-3xl p-8 grid lg:grid-cols-[auto_1fr] gap-10 items-center">
-          <Ring percent={overallPercent} color="oklch(0.52 0.19 258)" size={180} label="Keseluruhan" value={`${completed}/${total}`} />
-          <div className="grid sm:grid-cols-4 gap-6">
-            {catPercent.map((c) => (
-              <Ring
-                key={c.key}
-                percent={c.percent}
-                color={c.key === "present" ? "oklch(0.6 0.18 200)" : c.key === "past" ? "oklch(0.78 0.14 65)" : c.key === "future" ? "oklch(0.55 0.19 258)" : "oklch(0.65 0.18 320)"}
-                label={c.label}
-                value={`${c.done}/${c.total}`}
-              />
-            ))}
+        <div className="quiz-final-card mt-12 pt-10 pb-10 flex flex-col md:flex-row gap-10 items-center justify-around">
+          <Ring percent={overallPercent} color="var(--color-dark)" size={160} label="Keseluruhan" value={`${completed}/${total}`} />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 items-center justify-center">
+            {catPercent.map((c) => {
+              const colors: Record<string, string> = {
+                present: "var(--color-green)",
+                past: "var(--color-orange)",
+                future: "var(--color-darkblue)",
+                "past-future": "var(--color-pink)"
+              };
+              return (
+                <Ring
+                  key={c.key}
+                  percent={c.percent}
+                  color={colors[c.key] || "var(--color-maroon)"}
+                  label={c.label}
+                  value={`${c.done}/${c.total}`}
+                />
+              );
+            })}
           </div>
         </div>
       </Reveal>
 
-      {/* Stats */}
+      {/* Stats Cards */}
       <Reveal>
-        <div className="mt-6 grid sm:grid-cols-4 gap-4">
-          {[
-            { v: `${completed}/${total}`, l: "Tenses dikuasai" },
-            { v: `${avg}%`, l: "Skor rata-rata" },
-            { v: `${storiesRead}/${STORIES.length}`, l: "Cerita selesai" },
-            { v: `${streak}`, l: "Streak" },
-          ].map((s) => (
-            <div key={s.l} className="glass rounded-2xl p-5">
-              <div className="heading-display text-3xl">{s.v}</div>
-              <div className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">{s.l}</div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+          {stats.map((s, i) => {
+            const rotation = (i % 2 === 0) ? -1.5 : 1.5;
+            return (
+              <div
+                key={s.l}
+                className={cn("quiz-card h-40 flex flex-col justify-center", `quiz-card-${s.color}`)}
+                style={{ transform: `rotate(${rotation}deg)` }}
+              >
+                <div className="quiz-card-header">
+                  <div className="text-4xl font-extrabold tracking-tight">{s.v}</div>
+                  <div className="text-xs uppercase tracking-widest font-semibold opacity-75 mt-2">{s.l}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </Reveal>
+
+      {/* Learning Path */}
+      <div className="mt-20 pb-12">
+        <Reveal>
+          <h2 className="text-3xl font-extrabold tracking-tight text-foreground">Learning Path</h2>
+          <p className="text-sm text-muted-foreground mt-1">Selesaikan quiz dengan skor ≥80% untuk membuka badge.</p>
+        </Reveal>
+
+        <div className="mt-12 space-y-14">
+          {CATEGORIES.map((c, catIdx) => (
+            <div key={c.key}>
+              <Reveal>
+                <div className="text-xs uppercase tracking-widest text-orange-600 font-bold mb-6 border-b border-border pb-2">{c.label}</div>
+              </Reveal>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+                {tensesByCategory(c.key).map((t, i) => {
+                  const p = tenses[t.slug];
+                  const status = !p ? "locked" : p.completed ? "done" : p.quizScore !== null ? "in-progress" : "locked";
+                  
+                  const colors = ["pink", "green", "lightblue", "orange", "maroon", "darkblue"];
+                  const colorClass = `quiz-card-${colors[(i + catIdx) % colors.length]}`;
+                  const rotation = (i % 2 === 0) ? -1.5 : 1.5;
+                  
+                  return (
+                    <Reveal key={t.slug}>
+                      <Link
+                        to="/formula/$tense"
+                        params={{ tense: t.slug }}
+                        className={cn("quiz-card h-48", colorClass)}
+                        style={{
+                          transform: `rotate(${rotation}deg)`,
+                          cursor: "url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer"
+                        }}
+                      >
+                        <div className="quiz-card-header h-full flex flex-col justify-between">
+                          <div className="flex items-center justify-between">
+                            <div className={cn(
+                              "grid h-8 w-8 place-items-center rounded-full text-xs font-semibold",
+                              status === "done" ? "bg-white/30 text-white" :
+                              status === "in-progress" ? "bg-white/20 text-white" :
+                              "bg-black/10 text-foreground"
+                            )}>
+                              {status === "done" ? <Check className="h-4 w-4" /> :
+                               status === "in-progress" ? <PlayCircle className="h-4 w-4" /> :
+                               <Lock className="h-4 w-4" />}
+                            </div>
+                            {p?.quizScore !== null && p?.quizScore !== undefined && (
+                              <span className="text-xs font-extrabold bg-white/25 rounded-full px-2 py-0.5">{p.quizScore}%</span>
+                            )}
+                          </div>
+                          <div className="quiz-card-title text-base line-clamp-2 mt-4 text-left font-bold">{t.name}</div>
+                        </div>
+                      </Link>
+                    </Reveal>
+                  );
+                })}
+              </div>
             </div>
           ))}
         </div>
-      </Reveal>
-
-      {/* Learning path */}
-      <Reveal>
-        <div className="mt-14">
-          <h2 className="text-xl font-semibold">Learning Path</h2>
-          <p className="text-sm text-muted-foreground mt-1">Setiap node = satu tense. Selesaikan quiz dengan skor ≥80% untuk membuka badge.</p>
-
-          <div className="mt-8 space-y-10">
-            {CATEGORIES.map((c) => (
-              <div key={c.key}>
-                <div className="text-xs uppercase tracking-widest text-primary font-semibold mb-4">{c.label}</div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                  {tensesByCategory(c.key).map((t, i) => {
-                    const p = tenses[t.slug];
-                    const status = !p ? "locked" : p.completed ? "done" : p.quizScore !== null ? "in-progress" : "locked";
-                    return (
-                      <Link
-                        key={t.slug}
-                        to="/tenses/$tense"
-                        params={{ tense: t.slug }}
-                        className={`relative glass rounded-2xl p-4 hover:-translate-y-1 transition-all ${i % 2 === 1 ? "sm:translate-y-4" : ""}`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className={`grid h-8 w-8 place-items-center rounded-full text-xs font-semibold ${
-                            status === "done" ? "bg-success/15 text-success" :
-                            status === "in-progress" ? "bg-primary-soft text-primary" :
-                            "bg-muted text-muted-foreground"
-                          }`}>
-                            {status === "done" ? <Check className="h-4 w-4" /> :
-                             status === "in-progress" ? <PlayCircle className="h-4 w-4" /> :
-                             <Lock className="h-4 w-4" />}
-                          </div>
-                          {p?.quizScore !== null && p?.quizScore !== undefined && (
-                            <span className="text-[10px] font-semibold text-muted-foreground">{p.quizScore}%</span>
-                          )}
-                        </div>
-                        <div className="mt-3 text-sm font-semibold leading-tight">{t.name}</div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Reveal>
+      </div>
     </div>
   );
 }
