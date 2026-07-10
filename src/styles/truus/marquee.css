@@ -257,12 +257,14 @@
 }
 
 /* ─── Tenses page: sticky pin wrapper ────────────────────────────────────── */
-/* Outer: tall enough to give the gallery enough scroll room                  */
+/* Outer: intentionally enormous — Tenses is a single-section page with no   */
+/* content below. The ArcGallery's modulo wrapping loops infinitely, so this  */
+/* height just ensures the sticky pin never releases during a scroll session. */
+/* 9999vh ≈ 9 full card-loop revolutions on a 1080px screen.                 */
 .tenses-pinned-outer {
     position: relative;
     width: 100%;
-    /* 420vh ≈ gallery scrollMultiplier 1.2 × 16 cards × 240px stride + viewport  */
-    height: 420vh;
+    height: 9999vh;
 }
 
 /* Inner: pins itself to the top of the viewport for the duration of the     */

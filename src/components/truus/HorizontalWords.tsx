@@ -30,48 +30,23 @@ const HorizontalWords = () => {
             // that the querySelectorAll will find nothing and the animation will gracefully skip.
             const arrows = container.querySelectorAll('.horizontal-words__arrow-svg path, .horizontal-words__arrow-end-svg path');
 
-            // --- ENTRANCE & PINNING LOGIC ---
-            // To make letters start animating as we scroll down from VimeoHero,
-            // we start the horizontal movement as soon as the section enters the viewport (top bottom).
-            const entranceDistance = window.innerHeight;
-            const pinnedDistance = 2500;
-
+            // --- AUTONOMOUS MARQUEE TIMELINE ---
             const scrollTween = gsap.timeline({
-                scrollTrigger: {
-                    trigger: container,
-                    start: "top bottom",
-                    end: () => `+=${entranceDistance + pinnedDistance}`,
-                    scrub: 1,
-                    invalidateOnRefresh: true,
-                }
+                repeat: -1,
+                defaults: { ease: "none" }
             });
 
             scrollTween
                 .fromTo(textRef, {
-                    x: window.innerWidth // Start words off-screen right
+                    x: window.innerWidth // Start off-screen right
                 }, {
-                    x: window.innerWidth * 0.5,
-                    ease: "none",
-                    duration: entranceDistance
-                })
-                .to(textRef, {
                     x: () => {
                         const width = textRef ? (textRef as HTMLElement).scrollWidth : 0;
-                        return -(width - window.innerWidth * 0.5);
+                        // Account for the large absolute arrow at the end
+                        return -(width + window.innerWidth * 1.5);
                     },
-                    ease: "none",
-                    duration: pinnedDistance
+                    duration: 22 // Constant autonomous speed
                 });
-
-            // Separate pinning logic so it only locks when the section hits the top
-            ScrollTrigger.create({
-                trigger: container,
-                start: "top top",
-                end: () => `+=${pinnedDistance}`,
-                pin: pinRef.current || true,
-                pinSpacing: true,
-                invalidateOnRefresh: true
-            });
             // ------------------------------------
 
             // Bounce each letter randomly

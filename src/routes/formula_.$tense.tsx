@@ -129,20 +129,15 @@ function TenseDetailPage() {
     <div style={{ background: "#F5F1EB", minHeight: "100vh" }}>
       <div style={{ maxWidth: 1000, margin: "0 auto", padding: "120px 24px 96px" }}>
         <Hero tense={t} />
-        <Divider />
-        <OverviewSection tense={t} />
-        <Divider />
-        <FormulaSection tense={t} />
-        <Divider />
-        <ExamplesSection tense={t} />
-        <Divider />
-        <TimeExpressionsSection tense={t} />
-        <Divider />
-        <UsageSection tense={t} />
-        <Divider />
-        <ExerciseSection tense={t} questions={questions} />
-        <Divider />
-        <QuizCtaSection tense={t} />
+        <div style={{ display: "flex", flexDirection: "column", gap: "2.5rem", marginTop: "2rem" }}>
+          <OverviewSection tense={t} />
+          <FormulaSection tense={t} />
+          <ExamplesSection tense={t} />
+          <TimeExpressionsSection tense={t} />
+          <UsageSection tense={t} />
+          <ExerciseSection tense={t} questions={questions} />
+          <QuizCtaSection tense={t} />
+        </div>
       </div>
     </div>
   );
@@ -158,7 +153,7 @@ function Divider() {
 
 // ─── Section Label ────────────────────────────────────────────────────────────
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+function SectionLabel({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
     <span style={{
       display: "block",
@@ -169,6 +164,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
       textTransform: "uppercase",
       color: "#f5693c",
       marginBottom: "1.25rem",
+      ...style
     }}>
       {children}
     </span>
@@ -224,14 +220,14 @@ function Hero({ tense }: TenseProp) {
 
 function OverviewSection({ tense }: TenseProp) {
   return (
-    <section style={{ padding: "64px 0", textAlign: "center" }}>
-      <SectionLabel>Overview</SectionLabel>
+    <section className="formula-card formula-card-green" style={{ textAlign: "center" }}>
+      <SectionLabel style={{ color: "rgba(255, 255, 255, 0.75)" }}>Overview</SectionLabel>
       <p style={{
         fontFamily: "'Lora', serif",
         fontStyle: "italic",
         fontSize: "clamp(1.125rem, 2.5vw, 1.5rem)",
         lineHeight: 1.7,
-        color: "#2a2420",
+        color: "var(--color-white)",
         maxWidth: 680,
         margin: "0 auto",
       }}>
@@ -256,22 +252,41 @@ function FormulaSection({ tense }: TenseProp) {
   const ref = useScrollReveal<HTMLElement>();
 
   return (
-    <section ref={ref} style={{ padding: "64px 0" }}>
-      <SectionLabel>Sentence Formula</SectionLabel>
+    <section ref={ref} className="formula-card formula-card-darkblue">
+      <SectionLabel style={{ color: "rgba(255, 255, 255, 0.75)" }}>Sentence Formula</SectionLabel>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
         {FORMULA_TYPES.map(({ key, label }) => {
           const formulaStr = tense.formula[key];
           const groups = parseFormulaToGroups(formulaStr);
+          
+          let cardColorClass = "";
+          let labelColor = "rgba(0, 0, 0, 0.4)";
+          let formulaColor = "#111111";
+          let groupBg = "rgba(255, 255, 255, 0.85)";
+
+          if (key === "positive") {
+            cardColorClass = "formula-card-lightblue";
+          } else if (key === "negative") {
+            cardColorClass = "formula-card-orange";
+          } else if (key === "interrogative") {
+            cardColorClass = "formula-card-maroon";
+            labelColor = "rgba(255, 255, 255, 0.7)";
+            formulaColor = "#ffffff";
+            groupBg = "rgba(255, 255, 255, 0.08)";
+          } else {
+            cardColorClass = "formula-card-pink";
+          }
+
           return (
-            <div key={key}>
+            <div key={key} className={`formula-card ${cardColorClass}`} style={{ padding: "1.5rem", marginBottom: 0 }}>
               <p style={{
                 fontFamily: "'Epilogue', sans-serif",
                 fontWeight: 800,
                 fontSize: "0.75rem",
                 textTransform: "uppercase",
                 letterSpacing: "0.1em",
-                color: "#9c9290",
+                color: labelColor,
                 marginBottom: "0.75rem",
               }}>
                 {label}
@@ -283,11 +298,11 @@ function FormulaSection({ tense }: TenseProp) {
               }}>
                 {groups.map((group, i) => (
                   <div key={i} style={{
-                    background: "#ffffff",
+                    background: groupBg,
                     borderRadius: "16px",
                     padding: "1.25rem 1.5rem",
-                    boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
-                    border: "1px solid rgba(0,0,0,0.06)",
+                    boxShadow: "0 2px 12px rgba(0,0,0,0.02)",
+                    border: "1px solid rgba(0,0,0,0.04)",
                   }}>
                     <span style={{
                       display: "block",
@@ -296,7 +311,7 @@ function FormulaSection({ tense }: TenseProp) {
                       fontSize: "0.6875rem",
                       textTransform: "uppercase",
                       letterSpacing: "0.1em",
-                      color: "#b8b0aa",
+                      color: labelColor,
                       marginBottom: "0.5rem",
                     }}>
                       {group.pronouns}
@@ -305,7 +320,7 @@ function FormulaSection({ tense }: TenseProp) {
                       fontFamily: "'Epilogue', monospace",
                       fontWeight: 900,
                       fontSize: "clamp(0.9rem, 2vw, 1.125rem)",
-                      color: "#111111",
+                      color: formulaColor,
                       letterSpacing: "-0.01em",
                       lineHeight: 1.35,
                       wordBreak: "break-word",
@@ -336,8 +351,8 @@ function ExamplesSection({ tense }: TenseProp) {
   const ref = useScrollReveal<HTMLElement>();
 
   return (
-    <section ref={ref} style={{ padding: "64px 0" }}>
-      <SectionLabel>Sentence Examples</SectionLabel>
+    <section ref={ref} className="formula-card formula-card-pink">
+      <SectionLabel style={{ color: "rgba(0, 0, 0, 0.6)" }}>Sentence Examples</SectionLabel>
 
       {/* Contextual examples */}
       {tense.examples && tense.examples.length > 0 && (
@@ -348,7 +363,7 @@ function ExamplesSection({ tense }: TenseProp) {
             fontSize: "0.75rem",
             textTransform: "uppercase",
             letterSpacing: "0.1em",
-            color: "#9c9290",
+            color: "rgba(0, 0, 0, 0.45)",
             marginBottom: "0.75rem",
           }}>
             Contextual
@@ -356,15 +371,15 @@ function ExamplesSection({ tense }: TenseProp) {
           <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem" }}>
             {tense.examples.map((s, i) => (
               <div key={i} style={{
-                background: "#ffffff",
+                background: "rgba(255, 255, 255, 0.7)",
                 borderRadius: "14px",
                 padding: "1rem 1.375rem",
-                boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
-                border: "1px solid rgba(0,0,0,0.06)",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.02)",
+                border: "1px solid rgba(0,0,0,0.04)",
                 fontFamily: "'Lora', serif",
                 fontStyle: "italic",
                 fontSize: "1.0625rem",
-                color: "#2a2420",
+                color: "var(--color-dark)",
                 lineHeight: 1.6,
               }}>
                 "{s}"
@@ -388,7 +403,7 @@ function ExamplesSection({ tense }: TenseProp) {
               fontSize: "0.75rem",
               textTransform: "uppercase",
               letterSpacing: "0.1em",
-              color: "#9c9290",
+              color: "rgba(0, 0, 0, 0.45)",
               marginBottom: "0.625rem",
             }}>
               {title}
@@ -396,15 +411,15 @@ function ExamplesSection({ tense }: TenseProp) {
             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               {(tense[key] as string[]).slice(0, 3).map((s, i) => (
                 <div key={i} style={{
-                  background: "#ffffff",
+                  background: "rgba(255, 255, 255, 0.7)",
                   borderRadius: "12px",
                   padding: "0.875rem 1.125rem",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-                  border: "1px solid rgba(0,0,0,0.06)",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
+                  border: "1px solid rgba(0,0,0,0.04)",
                   fontFamily: "'Lora', serif",
                   fontStyle: "italic",
                   fontSize: "0.9375rem",
-                  color: "#2a2420",
+                  color: "var(--color-dark)",
                   lineHeight: 1.55,
                 }}>
                   "{s}"
@@ -433,16 +448,15 @@ function TimeExpressionsSection({ tense }: TenseProp) {
   const ref = useScrollReveal<HTMLElement>();
 
   return (
-    <section ref={ref} style={{ padding: "64px 0", textAlign: "center" }}>
-      <SectionLabel>Common Time Expressions</SectionLabel>
+    <section ref={ref} className="formula-card formula-card-green" style={{ textAlign: "center" }}>
+      <SectionLabel style={{ color: "rgba(255, 255, 255, 0.75)" }}>Common Time Expressions</SectionLabel>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "0.625rem", justifyContent: "center" }}>
-        {tense.timeExpressions.map((e, i) => {
-          const { bg, color } = PILL_COLORS[i % PILL_COLORS.length];
+        {tense.timeExpressions.map((e) => {
           return (
             <span key={e} style={{
               display: "inline-block",
-              background: bg,
-              color: color,
+              background: "rgba(255, 255, 255, 0.15)",
+              color: "#ffffff",
               padding: "0.5rem 1.125rem",
               borderRadius: "999px",
               fontFamily: "'Epilogue', sans-serif",
@@ -450,6 +464,7 @@ function TimeExpressionsSection({ tense }: TenseProp) {
               fontSize: "0.75rem",
               textTransform: "uppercase",
               letterSpacing: "0.1em",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
             }}>
               {e}
             </span>
@@ -466,27 +481,26 @@ function UsageSection({ tense }: TenseProp) {
   const ref = useScrollReveal<HTMLElement>();
 
   return (
-    <section ref={ref} style={{ padding: "64px 0" }}>
-      <SectionLabel>When to Use</SectionLabel>
+    <section ref={ref} className="formula-card formula-card-darkblue">
+      <SectionLabel style={{ color: "rgba(255, 255, 255, 0.75)" }}>When to Use</SectionLabel>
       <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", maxWidth: 680 }}>
         {tense.usage.map((u, i) => (
           <div key={i} style={{
             display: "flex",
             alignItems: "flex-start",
             gap: "1rem",
-            background: "#ffffff",
+            background: "rgba(255, 255, 255, 0.08)",
             borderRadius: "14px",
             padding: "1.125rem 1.375rem",
-            boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
-            border: "1px solid rgba(0,0,0,0.06)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
           }}>
             <span style={{
               flexShrink: 0,
               width: 28,
               height: 28,
               borderRadius: "50%",
-              background: "#fff0eb",
-              color: "#f5693c",
+              background: "rgba(255, 255, 255, 0.15)",
+              color: "#ffffff",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -500,7 +514,7 @@ function UsageSection({ tense }: TenseProp) {
               fontFamily: "'Lora', serif",
               fontSize: "1rem",
               lineHeight: 1.65,
-              color: "#2a2420",
+              color: "#ffffff",
               margin: 0,
               paddingTop: "0.125rem",
             }}>

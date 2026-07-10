@@ -25,8 +25,8 @@ function Home() {
       <header className="main-header">
         <VimeoHero />
       </header>
-      <DoubleMarquee />
       <HorizontalWords />
+      <DoubleMarquee />
       <main>
         <div className="content-section motion-cards-wrapper">
           <MotionCards />

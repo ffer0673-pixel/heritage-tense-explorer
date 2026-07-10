@@ -1,22 +1,22 @@
 'use client';
 
+import { useRef } from 'react';
+import FloatingObjects from './FloatingObjects';
+
 export default function VimeoHero() {
+    const heroRef = useRef<HTMLDivElement>(null);
+
     return (
-        <div className="vimeo-hero">
-            {/* Gradient fade */}
-            <div className="vimeo-hero__fade" />
+        <div className="vimeo-hero" ref={heroRef}>
+            {/* Floating educational objects background */}
+            <FloatingObjects containerRef={heroRef} />
 
             {/* ① Headline — bottom left, word-by-word layout */}
             <div className="home-header__title">
                 <h1 className="vimeo-hero__title">
-
-                    {/* "we" */}
-                    <span className="vimeo-hero__word">we </span>
-
-                    {/* "make" + ⑤ smiley (no animation) */}
                     <span className="vimeo-hero__word is--relative">
-                        <span>make </span>
-                        <div className="home-header__smiley">
+                        <span>Tenses</span>
+                        <div className="home-header__smiley" style={{ left: '70%' }}>
                             <img
                                 src="/assets/VimeoHero SVG/smiley-face.svg"
                                 alt=""
@@ -25,18 +25,6 @@ export default function VimeoHero() {
                         </div>
                     </span>
 
-                    {/* "advertising" italic */}
-                    <span className="vimeo-hero__word"><em>advertising </em></span>
-
-                    {/* "for" */}
-                    <span className="vimeo-hero__word">for </span>
-
-                    <div style={{ flexBasis: '100%', height: 0 }} />
-
-                    <span className="vimeo-hero__word">the </span>
-                    <span className="vimeo-hero__word">new </span>
-
-                    {/* "mainstream" + ⑤ pink star (no spin) + oval underline */}
                     <span className="vimeo-hero__word is--relative">
                         <div className="home-header__star">
                             <div className="home-header__star-inner">
@@ -53,9 +41,8 @@ export default function VimeoHero() {
                             alt=""
                             className="home-header__title-line-svg"
                         />
-                        <span>mainstream</span>
+                        <span>AroundUs</span>
                     </span>
-
                 </h1>
             </div>
         </div>

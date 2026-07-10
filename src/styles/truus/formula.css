@@ -1,0 +1,52 @@
+/* ─── Formula Page Cards ─── */
+.formula-card {
+    position: relative;
+    width: 100%;
+    border-radius: 20px;
+    padding: clamp(2rem, 5vw, 3rem);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.formula-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* ─── Color Classes ─── */
+/* Green Card */
+.formula-card-green {
+    background-color: var(--color-green);
+    color: var(--color-white);
+}
+
+/* Dark Blue Card */
+.formula-card-darkblue {
+    background-color: var(--color-darkblue);
+    color: var(--color-white);
+}
+
+/* Light Blue Card */
+.formula-card-lightblue {
+    background-color: var(--color-lightblue);
+    color: var(--color-dark);
+}
+
+/* Orange Card */
+.formula-card-orange {
+    background-color: var(--color-orange);
+    color: var(--color-dark);
+}
+
+/* Maroon Card */
+.formula-card-maroon {
+    background-color: var(--color-maroon);
+    color: var(--color-white);
+}
+
+/* Pink Card */
+.formula-card-pink {
+    background-color: var(--color-pink);
+    color: var(--color-dark);
+}
