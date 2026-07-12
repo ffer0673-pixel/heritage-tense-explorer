@@ -83,7 +83,7 @@ function ProgressPage() {
         <div className="quiz-title-container flex items-end justify-between flex-wrap gap-6 border-b border-border pb-8">
           <div>
             <h1 className="quiz-main-title">
-              Perjalananmu. <span className="italic-text">kemajuan.</span>
+              Progress.
             </h1>
             <svg xmlns="http://www.w3.org/2000/svg" width="280" viewBox="0 0 159 17" fill="none" className="quiz-title-underline-svg">
               <path d="M1 12.1515C53.0771 5.7187 105.529 2.30552 158 1.93652" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>

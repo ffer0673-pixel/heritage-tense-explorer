@@ -18,6 +18,7 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { ThemeApplier } from "@/components/ThemeApplier";
 import SvgSymbols from "@/components/truus/SvgSymbols";
 import CursorBubble from "@/components/truus/CursorBubble";
+import { GlobalHorizontalScrollbar } from "@/components/GlobalHorizontalScrollbar";
 import "@/styles/truus/globals.css";
 
 function NotFoundComponent() {
@@ -120,6 +121,7 @@ function RootComponent() {
       <SvgSymbols />
       <SmoothScroll />
       <CursorBubble />
+      <GlobalHorizontalScrollbar />
       <div className="min-h-screen flex flex-col">
         <Navbar />
         <main className="flex-1">

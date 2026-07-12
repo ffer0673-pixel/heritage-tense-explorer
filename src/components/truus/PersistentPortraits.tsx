@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, useMotionValue, useSpring, AnimatePresence, useDragControls } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useRouterState } from '@tanstack/react-router';
 
@@ -207,12 +207,24 @@ const getLayoutForSection = (
 };
 
 export default function PersistentPortraits() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [activeSection, setActiveSection] = useState<string>("hero");
   const [footerFullyVisible, setFooterFullyVisible] = useState(false);
   const [screenType, setScreenType] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [windowSize, setWindowSize] = useState({ width: 1200, height: 800 });
   const [activePortrait, setActivePortrait] = useState<'fardan' | 'bintang' | 'antoni' | null>(null);
+  const [draggableId, setDraggableId] = useState<'fardan' | 'bintang' | 'antoni' | null>(null);
+  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const dragControls1 = useDragControls();
+  const dragControls2 = useDragControls();
+  const dragControls3 = useDragControls();
+
+  useEffect(() => {
+    return () => {
+      if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+    };
+  }, []);
 
   // Track responsive screen dimensions
   useEffect(() => {
@@ -329,6 +341,10 @@ export default function PersistentPortraits() {
   const springRotate3 = useSpring(baseRotate3, springConfig);
   const springOpacity3 = useSpring(baseOpacity3, springConfig);
 
+  const customPos1 = useRef<{ x: number; y: number } | null>(null);
+  const customPos2 = useRef<{ x: number; y: number } | null>(null);
+  const customPos3 = useRef<{ x: number; y: number } | null>(null);
+
   // Update layout targets whenever activeSection, window size, or active portrait changes
   useEffect(() => {
     const layout = getLayoutForSection(
@@ -339,20 +355,22 @@ export default function PersistentPortraits() {
       activePortrait !== null
     );
 
-    baseX1.set(layout.portraitA.x);
-    baseY1.set(layout.portraitA.y);
+    const isHero = activeSection === "hero";
+
+    baseX1.set(isHero && customPos1.current ? customPos1.current.x : layout.portraitA.x);
+    baseY1.set(isHero && customPos1.current ? customPos1.current.y : layout.portraitA.y);
     baseScale1.set(layout.portraitA.scale);
     baseRotate1.set(layout.portraitA.rotate);
     baseOpacity1.set(layout.portraitA.opacity);
 
-    baseX2.set(layout.portraitB.x);
-    baseY2.set(layout.portraitB.y);
+    baseX2.set(isHero && customPos2.current ? customPos2.current.x : layout.portraitB.x);
+    baseY2.set(isHero && customPos2.current ? customPos2.current.y : layout.portraitB.y);
     baseScale2.set(layout.portraitB.scale);
     baseRotate2.set(layout.portraitB.rotate);
     baseOpacity2.set(layout.portraitB.opacity);
 
-    baseX3.set(layout.portraitC.x);
-    baseY3.set(layout.portraitC.y);
+    baseX3.set(isHero && customPos3.current ? customPos3.current.x : layout.portraitC.x);
+    baseY3.set(isHero && customPos3.current ? customPos3.current.y : layout.portraitC.y);
     baseScale3.set(layout.portraitC.scale);
     baseRotate3.set(layout.portraitC.rotate);
     baseOpacity3.set(layout.portraitC.opacity);
@@ -404,9 +422,14 @@ export default function PersistentPortraits() {
 
   // Sync state reference inside high-frequency RAF loop
   const activePortraitRef = useRef<string | null>(null);
+  const draggableIdRef = useRef<string | null>(null);
   useEffect(() => {
     activePortraitRef.current = activePortrait;
   }, [activePortrait]);
+
+  useEffect(() => {
+    draggableIdRef.current = draggableId;
+  }, [draggableId]);
 
   // continuous RAF loop to drive float offsets & mouse parallax
   useEffect(() => {
@@ -444,36 +467,69 @@ export default function PersistentPortraits() {
 
       // Card 1: Bintang (Portrait A)
       const isActive1 = activePortraitRef.current === 'bintang';
+      const isDragging1 = draggableIdRef.current === 'bintang';
       const fX1 = Math.sin(time * floatA.speedX + floatA.phX) * floatA.ampX * decay;
       const fY1 = Math.cos(time * floatA.speedY + floatA.phY) * floatA.ampY * decay;
       const fR1 = Math.sin(time * floatA.speedRot + floatA.phRot) * floatA.ampRotate * decay;
       const fS1 = Math.sin(time * floatA.speedScale + floatA.phScale) * floatA.ampScale * decay;
-      x1.set(springX1.get() + fX1 + pmX * floatA.depth * decay);
-      y1.set(springY1.get() + fY1 + pmY * floatA.depth * decay);
+      if (!isDragging1) {
+        x1.set(springX1.get() + fX1 + pmX * floatA.depth * decay);
+        y1.set(springY1.get() + fY1 + pmY * floatA.depth * decay);
+      } else {
+        const targetX = x1.get() - fX1 - pmX * floatA.depth * decay;
+        const targetY = y1.get() - fY1 - pmY * floatA.depth * decay;
+        customPos1.current = { x: targetX, y: targetY };
+        baseX1.set(targetX);
+        baseY1.set(targetY);
+        springX1.set(targetX);
+        springY1.set(targetY);
+      }
       scale1.set(springScale1.get() * (1 + fS1) * (isActive1 ? 1.1 : 1.0));
       rotate1.set(springRotate1.get() + fR1);
       opacity1.set(springOpacity1.get() * (footerFullyVisibleRef.current ? 0.85 : 1));
 
       // Card 2: Fardan (Portrait B)
       const isActive2 = activePortraitRef.current === 'fardan';
+      const isDragging2 = draggableIdRef.current === 'fardan';
       const fX2 = Math.sin(time * floatB.speedX + floatB.phX) * floatB.ampX * decay;
       const fY2 = Math.cos(time * floatB.speedY + floatB.phY) * floatB.ampY * decay;
       const fR2 = Math.sin(time * floatB.speedRot + floatB.phRot) * floatB.ampRotate * decay;
       const fS2 = Math.sin(time * floatB.speedScale + floatB.phScale) * floatB.ampScale * decay;
-      x2.set(springX2.get() + fX2 + pmX * floatB.depth * decay);
-      y2.set(springY2.get() + fY2 + pmY * floatB.depth * decay);
+      if (!isDragging2) {
+        x2.set(springX2.get() + fX2 + pmX * floatB.depth * decay);
+        y2.set(springY2.get() + fY2 + pmY * floatB.depth * decay);
+      } else {
+        const targetX = x2.get() - fX2 - pmX * floatB.depth * decay;
+        const targetY = y2.get() - fY2 - pmY * floatB.depth * decay;
+        customPos2.current = { x: targetX, y: targetY };
+        baseX2.set(targetX);
+        baseY2.set(targetY);
+        springX2.set(targetX);
+        springY2.set(targetY);
+      }
       scale2.set(springScale2.get() * (1 + fS2) * (isActive2 ? 1.1 : 1.0));
       rotate2.set(springRotate2.get() + fR2);
       opacity2.set(springOpacity2.get() * (footerFullyVisibleRef.current ? 0.85 : 1));
 
       // Card 3: Antoni (Portrait C)
       const isActive3 = activePortraitRef.current === 'antoni';
+      const isDragging3 = draggableIdRef.current === 'antoni';
       const fX3 = Math.sin(time * floatC.speedX + floatC.phX) * floatC.ampX * decay;
       const fY3 = Math.cos(time * floatC.speedY + floatC.phY) * floatC.ampY * decay;
       const fR3 = Math.sin(time * floatC.speedRot + floatC.phRot) * floatC.ampRotate * decay;
       const fS3 = Math.sin(time * floatC.speedScale + floatC.phScale) * floatC.ampScale * decay;
-      x3.set(springX3.get() + fX3 + pmX * floatC.depth * decay);
-      y3.set(springY3.get() + fY3 + pmY * floatC.depth * decay);
+      if (!isDragging3) {
+        x3.set(springX3.get() + fX3 + pmX * floatC.depth * decay);
+        y3.set(springY3.get() + fY3 + pmY * floatC.depth * decay);
+      } else {
+        const targetX = x3.get() - fX3 - pmX * floatC.depth * decay;
+        const targetY = y3.get() - fY3 - pmY * floatC.depth * decay;
+        customPos3.current = { x: targetX, y: targetY };
+        baseX3.set(targetX);
+        baseY3.set(targetY);
+        springX3.set(targetX);
+        springY3.set(targetY);
+      }
       scale3.set(springScale3.get() * (1 + fS3) * (isActive3 ? 1.1 : 1.0));
       rotate3.set(springRotate3.get() + fR3);
       opacity3.set(springOpacity3.get() * (footerFullyVisibleRef.current ? 0.85 : 1));
@@ -491,12 +547,43 @@ export default function PersistentPortraits() {
     springMouseX, springMouseY
   ]);
 
-  const handlePortraitClick = (e: React.MouseEvent, id: 'fardan' | 'bintang' | 'antoni') => {
+  const lastPointerDownRef = useRef<{ [key: string]: number }>({});
+
+  const handlePointerDown = (e: React.PointerEvent, id: 'fardan' | 'bintang' | 'antoni', controls: any) => {
     e.stopPropagation();
-    if (activePortrait === id) {
-      setActivePortrait(null);
+    const now = Date.now();
+    const lastTime = lastPointerDownRef.current[id] || 0;
+
+    if (now - lastTime < 300) {
+      // Double click / pointer down detected!
+      // Cancel any pending single-click action
+      if (clickTimeoutRef.current) {
+        clearTimeout(clickTimeoutRef.current);
+        clickTimeoutRef.current = null;
+      }
+      setDraggableId(id);
+      // Start drag session immediately on this second pointer down
+      controls.start(e);
     } else {
-      setActivePortrait(id);
+      // Single press: queue the single-click bio toggle
+      lastPointerDownRef.current[id] = now;
+      
+      // If we are already dragging this card, don't trigger bio
+      // If we are already dragging this card, single click locks it and opens bio
+      if (draggableId === id) {
+        setDraggableId(null);
+        setActivePortrait(prev => prev === id ? null : id);
+        return;
+      }
+
+      if (clickTimeoutRef.current) {
+        clearTimeout(clickTimeoutRef.current);
+      }
+      
+      clickTimeoutRef.current = setTimeout(() => {
+        clickTimeoutRef.current = null;
+        setActivePortrait(prev => prev === id ? null : id);
+      }, 250);
     }
   };
 
@@ -504,42 +591,58 @@ export default function PersistentPortraits() {
     fardan: {
       name: "Fardan",
       role: "Project Leader",
-      desc: "Responsible for UI Design, React Development, AI Integration, Content Planning, Website Architecture."
+      desc: "Responsible for UI Design, React Development, Content Planning, Website Architecture."
     },
     bintang: {
-      name: "Bintang",
-      role: "Content Developer",
-      desc: "Prepared learning materials, grammar validation, exercise design, and learning activities."
+      name: "Nursyahidah Hanifah",
+      role: "Visual Designer",
+      desc: "Crafted the visual identity, typography, color system, and overall aesthetics to create a modern and cohesive learning experience."
     },
     antoni: {
-      name: "Antoni",
-      role: "Documentation & Multimedia",
-      desc: "Handled documentation, visual assets, photography, presentation materials."
+      name: "Novita Anggraini",
+      role: "Curriculum Design",
+      desc: "Responsible for curriculum design, preparing learning materials, grammar validation, exercise design, and learning activities."
     }
   };
 
   const isDesktopOrTablet = screenType === 'desktop' || screenType === 'tablet';
 
+  const size = screenType === 'mobile' ? '70px' : (screenType === 'tablet' ? '94px' : '116px');
+
   return (
-    <div className="persistent-portraits-layer" style={{ zIndex: activeSection === 'hero' ? 2 : 99 }}>
+    <div ref={containerRef} className="persistent-portraits-layer" style={{ zIndex: activeSection === 'hero' ? 2 : 99 }}>
       {/* Portrait A: Bintang (Front portrait - Middle in list) */}
       <motion.div
-        className={`floating-portrait-card ${activePortrait === 'bintang' ? 'is-active' : ''}`}
+        drag
+        dragListener={false}
+        dragControls={dragControls1}
+        dragConstraints={containerRef}
+        dragElastic={0.2}
+        dragMomentum={true}
+        className={`floating-portrait-card ${activePortrait === 'bintang' ? 'is-active' : ''} ${draggableId === 'bintang' ? 'is-dragging-mode' : ''}`}
         style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: size,
+          height: size,
           x: x1,
           y: y1,
           scale: scale1,
           rotate: rotate1,
           opacity: opacity1,
           zIndex: activePortrait === 'bintang' ? 6 : 5,
+          cursor: draggableId === 'bintang' 
+            ? "url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, grab" 
+            : "url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer"
         }}
-        onClick={(e) => handlePortraitClick(e, 'bintang')}
+        onPointerDown={(e) => handlePointerDown(e, 'bintang', dragControls1)}
       >
-        <div className="floating-portrait-card__inner">
+        <div className="floating-portrait-card__inner" style={{ width: '100%', height: '100%' }}>
           <img
             src="/assets/hijab-woman.jpg"
             className="floating-portrait-card__image"
-            alt="Bintang - Content Developer"
+            alt="Nursyahidah Hanifah - Visual Designer"
           />
         </div>
 
@@ -553,6 +656,7 @@ export default function PersistentPortraits() {
               exit={{ opacity: 0, scale: 0.95, x: 15, y: "-50%" }}
               transition={{ duration: 0.28, ease: "easeOut" }}
               onClick={(e) => e.stopPropagation()}
+              onPointerDown={(e) => e.stopPropagation()}
             >
               <button className="profile-card__close-btn" onClick={() => setActivePortrait(null)}>
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
@@ -570,18 +674,32 @@ export default function PersistentPortraits() {
 
       {/* Portrait B: Fardan (Middle portrait - Top in list) */}
       <motion.div
-        className={`floating-portrait-card ${activePortrait === 'fardan' ? 'is-active' : ''}`}
+        drag
+        dragListener={false}
+        dragControls={dragControls2}
+        dragConstraints={containerRef}
+        dragElastic={0.2}
+        dragMomentum={true}
+        className={`floating-portrait-card ${activePortrait === 'fardan' ? 'is-active' : ''} ${draggableId === 'fardan' ? 'is-dragging-mode' : ''}`}
         style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: size,
+          height: size,
           x: x2,
           y: y2,
           scale: scale2,
           rotate: rotate2,
           opacity: opacity2,
           zIndex: activePortrait === 'fardan' ? 6 : 4,
+          cursor: draggableId === 'fardan' 
+            ? "url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, grab" 
+            : "url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer"
         }}
-        onClick={(e) => handlePortraitClick(e, 'fardan')}
+        onPointerDown={(e) => handlePointerDown(e, 'fardan', dragControls2)}
       >
-        <div className="floating-portrait-card__inner">
+        <div className="floating-portrait-card__inner" style={{ width: '100%', height: '100%' }}>
           <img
             src="/ferdian.png"
             className="floating-portrait-card__image"
@@ -599,6 +717,7 @@ export default function PersistentPortraits() {
               exit={{ opacity: 0, scale: 0.95, x: 15, y: "-50%" }}
               transition={{ duration: 0.28, ease: "easeOut" }}
               onClick={(e) => e.stopPropagation()}
+              onPointerDown={(e) => e.stopPropagation()}
             >
               <button className="profile-card__close-btn" onClick={() => setActivePortrait(null)}>
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
@@ -616,22 +735,36 @@ export default function PersistentPortraits() {
 
       {/* Portrait C: Antoni (Back portrait - Bottom in list) */}
       <motion.div
-        className={`floating-portrait-card ${activePortrait === 'antoni' ? 'is-active' : ''}`}
+        drag
+        dragListener={false}
+        dragControls={dragControls3}
+        dragConstraints={containerRef}
+        dragElastic={0.2}
+        dragMomentum={true}
+        className={`floating-portrait-card ${activePortrait === 'antoni' ? 'is-active' : ''} ${draggableId === 'antoni' ? 'is-dragging-mode' : ''}`}
         style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: size,
+          height: size,
           x: x3,
           y: y3,
           scale: scale3,
           rotate: rotate3,
           opacity: opacity3,
           zIndex: activePortrait === 'antoni' ? 6 : 3,
+          cursor: draggableId === 'antoni' 
+            ? "url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, grab" 
+            : "url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer"
         }}
-        onClick={(e) => handlePortraitClick(e, 'antoni')}
+        onPointerDown={(e) => handlePointerDown(e, 'antoni', dragControls3)}
       >
-        <div className="floating-portrait-card__inner">
+        <div className="floating-portrait-card__inner" style={{ width: '100%', height: '100%' }}>
           <img
             src="/assets/hijab-woman-2.jpg"
             className="floating-portrait-card__image"
-            alt="Antoni - Documentation"
+            alt="Novita Anggraini - Curriculum Design"
           />
         </div>
 
@@ -645,6 +778,7 @@ export default function PersistentPortraits() {
               exit={{ opacity: 0, scale: 0.95, x: 15, y: "-50%" }}
               transition={{ duration: 0.28, ease: "easeOut" }}
               onClick={(e) => e.stopPropagation()}
+              onPointerDown={(e) => e.stopPropagation()}
             >
               <button className="profile-card__close-btn" onClick={() => setActivePortrait(null)}>
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
@@ -670,6 +804,7 @@ export default function PersistentPortraits() {
             exit={{ opacity: 0, y: 100 }}
             transition={{ duration: 0.28, ease: "easeOut" }}
             onClick={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
           >
             <button className="profile-card__close-btn" onClick={() => setActivePortrait(null)}>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2">

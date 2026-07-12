@@ -8,6 +8,22 @@ import { Link } from "@tanstack/react-router";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const getStorySlug = (cardSlug: string) => {
+  switch (cardSlug) {
+    case "benteng-heritage":
+      return "rumah-tua-benteng";
+    case "pasar-lama":
+      return "kisah-pasar-lama";
+    case "sungai-cisadane":
+      return "sore-di-cisadane";
+    case "budaya-cina-benteng":
+      return "festival-cap-go-meh";
+    case "kuliner-tangerang":
+    default:
+      return "kuliner-tangerang";
+  }
+};
+
 export default function MotionCards() {
   const sectionRef = useRef<HTMLElement>(null);
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -23,12 +39,12 @@ export default function MotionCards() {
       // Initialize starting values
       // Slide 0 is the base layer, visible initially
       gsap.set(slideRefs.current[0], { "--reveal": 0 });
-      gsap.set(contentRefs.current[0], { opacity: 1, y: 0 });
+      gsap.set(contentRefs.current[0], { autoAlpha: 1, y: 0 });
       
       // Slides 1-4 start hidden
       for (let i = 1; i < 5; i++) {
         gsap.set(slideRefs.current[i], { "--reveal": 100 });
-        gsap.set(contentRefs.current[i], { opacity: 0, y: 30 });
+        gsap.set(contentRefs.current[i], { autoAlpha: 0, y: 30 });
       }
 
       const tl = gsap.timeline({
@@ -49,13 +65,13 @@ export default function MotionCards() {
         ease: "none",
       }, 0.0);
       tl.to(contentRefs.current[0], {
-        opacity: 0,
+        autoAlpha: 0,
         y: -30,
         duration: 0.4,
         ease: "power1.inOut",
       }, 0.0);
       tl.to(contentRefs.current[1], {
-        opacity: 1,
+        autoAlpha: 1,
         y: 0,
         duration: 0.4,
         ease: "power1.inOut",
@@ -68,13 +84,13 @@ export default function MotionCards() {
         ease: "none",
       }, 1.0);
       tl.to(contentRefs.current[1], {
-        opacity: 0,
+        autoAlpha: 0,
         y: -30,
         duration: 0.4,
         ease: "power1.inOut",
       }, 1.0);
       tl.to(contentRefs.current[2], {
-        opacity: 1,
+        autoAlpha: 1,
         y: 0,
         duration: 0.4,
         ease: "power1.inOut",
@@ -87,13 +103,13 @@ export default function MotionCards() {
         ease: "none",
       }, 2.0);
       tl.to(contentRefs.current[2], {
-        opacity: 0,
+        autoAlpha: 0,
         y: -30,
         duration: 0.4,
         ease: "power1.inOut",
       }, 2.0);
       tl.to(contentRefs.current[3], {
-        opacity: 1,
+        autoAlpha: 1,
         y: 0,
         duration: 0.4,
         ease: "power1.inOut",
@@ -106,13 +122,13 @@ export default function MotionCards() {
         ease: "none",
       }, 3.0);
       tl.to(contentRefs.current[3], {
-        opacity: 0,
+        autoAlpha: 0,
         y: -30,
         duration: 0.4,
         ease: "power1.inOut",
       }, 3.0);
       tl.to(contentRefs.current[4], {
-        opacity: 1,
+        autoAlpha: 1,
         y: 0,
         duration: 0.4,
         ease: "power1.inOut",
@@ -203,25 +219,15 @@ export default function MotionCards() {
                 <div className="floema-slide__body">
                   <p className="floema-slide__desc">{card.short}</p>
 
-                  {/* Interactive Example sentence box */}
-                  <div className="floema-slide__example">
-                    <span className="floema-slide__example-label">
-                      Example Sentence:
-                    </span>
-                    <p className="floema-slide__example-text">
-                      "{card.exampleEn}"
-                    </p>
-                  </div>
-
                   <div className="floema-slide__cta-wrapper">
                     <Link
                       to="/cerita/$slug"
-                      params={{ slug: card.slug }}
+                      params={{ slug: getStorySlug(card.slug) }}
                       className="floema-slide__cta"
                       style={{ cursor: "url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer" }}
                     >
                       <span className="floema-slide__cta-text">
-                        Explore {card.title}
+                        baca cerita
                       </span>
                       <span className="floema-slide__cta-icon">
                         <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2">

@@ -1,0 +1,60 @@
+/* Scrollbar styling for native-scroll fallback elements */
+.global-horizontal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #8A8A8A #000000;
+}
+
+.global-horizontal-scrollbar::-webkit-scrollbar {
+  height: 16px;
+}
+
+.global-horizontal-scrollbar::-webkit-scrollbar-track {
+  background: #000000;
+  border-radius: 9999px;
+}
+
+.global-horizontal-scrollbar::-webkit-scrollbar-thumb {
+  background: #8A8A8A;
+  border-radius: 9999px;
+  transition: background-color 200ms ease;
+}
+
+.global-horizontal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #B5B5B5;
+}
+
+.global-horizontal-scrollbar::-webkit-scrollbar-thumb:active {
+  background: #666666;
+}
+
+/* Custom interactive scrollbar styles */
+.global-scrollbar-arrow {
+  color: #8A8A8A;
+  transition: color 200ms ease;
+}
+
+.global-scrollbar-arrow:hover {
+  color: #B5B5B5 !important;
+}
+
+.global-scrollbar-arrow:active {
+  color: #666666 !important;
+}
+
+.global-scrollbar-thumb {
+  background-color: #8A8A8A;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 200ms ease;
+  touch-action: none;
+}
+
+.global-scrollbar-thumb:hover {
+  background-color: #B5B5B5;
+}
+
+.global-scrollbar-thumb.dragging {
+  background-color: #666666;
+  transition: background-color 200ms ease;
+}
+

@@ -1,0 +1,301 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   src/styles/truus/reference.css — Premium Documentation-Style Reference Page
+   Inspired by Stripe Docs, Vercel, Linear, Notion, Apple Documentation.
+───────────────────────────────────────────────────────────────────────────── */
+
+/* ─── Page Wrapper ──────────────────────────────────────────────────────────── */
+.ref-page {
+    padding-top: 160px;
+    padding-bottom: 140px;
+    min-height: 100vh;
+    background-color: var(--bg-color);
+}
+
+/* ─── Centered Content Shell ────────────────────────────────────────────────── */
+.ref-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 48px;
+    font-family: 'Epilogue', sans-serif;
+    color: var(--color-dark);
+}
+
+/* ─── Page Header ───────────────────────────────────────────────────────────── */
+.ref-header {
+    margin-bottom: 72px;
+    border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
+    padding-bottom: 56px;
+}
+
+.ref-header-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-orange);
+    margin-bottom: 20px;
+}
+
+.ref-header-eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--color-orange);
+    flex-shrink: 0;
+}
+
+.ref-header-title {
+    font-size: 4.5rem;
+    font-weight: 800;
+    line-height: 1.06;
+    letter-spacing: -2.5px;
+    text-transform: lowercase;
+    color: var(--color-dark);
+    margin-bottom: 22px;
+}
+
+.ref-header-title span {
+    color: var(--color-orange);
+    font-style: italic;
+}
+
+.ref-header-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: rgba(26, 26, 26, 0.55);
+    max-width: 560px;
+    font-weight: 400;
+}
+
+/* ─── Category Grid ─────────────────────────────────────────────────────────── */
+.ref-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* ─── Category Card ─────────────────────────────────────────────────────────── */
+.ref-card {
+    background-color: #ffffff;
+    border-radius: 22px;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.04),
+        0 4px 16px rgba(0, 0, 0, 0.04),
+        0 12px 40px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ref-card:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.05),
+        0 8px 24px rgba(0, 0, 0, 0.07),
+        0 20px 60px rgba(0, 0, 0, 0.06);
+}
+
+/* ─── Card Header ───────────────────────────────────────────────────────────── */
+.ref-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 28px 36px 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    background-color: #fafafa;
+}
+
+.ref-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    color: var(--color-white);
+}
+
+.ref-card-icon-grammar   { background-color: var(--color-darkblue); }
+.ref-card-icon-culture   { background-color: var(--color-green); }
+.ref-card-icon-image     { background-color: var(--color-maroon); }
+.ref-card-icon-tools     { background-color: #1a1a1a; }
+
+.ref-card-title {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    color: var(--color-dark);
+}
+
+.ref-card-count {
+    margin-left: auto;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(26, 26, 26, 0.35);
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 3px 10px;
+    border-radius: 100px;
+    white-space: nowrap;
+}
+
+/* ─── Items List ────────────────────────────────────────────────────────────── */
+.ref-items-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* ─── Single Item Row ───────────────────────────────────────────────────────── */
+.ref-item {
+    padding: 18px 36px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    transition: background-color 0.18s ease;
+    position: relative;
+}
+
+.ref-item:last-child {
+    border-bottom: none;
+}
+
+.ref-item:hover {
+    background-color: rgba(0, 0, 0, 0.018);
+}
+
+/* ─── Item Link ─────────────────────────────────────────────────────────────── */
+.ref-item-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.965rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    text-decoration: none;
+    line-height: 1.4;
+    transition: color 0.15s ease;
+    cursor: url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer;
+}
+
+.ref-item-link:hover {
+    color: var(--color-darkblue);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1.5px;
+}
+
+.ref-ext-icon {
+    opacity: 0;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    transform: translate(-2px, 2px);
+    flex-shrink: 0;
+    color: var(--color-darkblue);
+}
+
+.ref-item-link:hover .ref-ext-icon {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
+/* ─── Item Plain (no URL) ───────────────────────────────────────────────────── */
+.ref-item-plain {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.965rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    line-height: 1.4;
+}
+
+/* ─── Item Note / Description ───────────────────────────────────────────────── */
+.ref-item-note {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.845rem;
+    color: rgba(26, 26, 26, 0.48);
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+/* ─── Footer Attribution ────────────────────────────────────────────────────── */
+.ref-footer {
+    margin-top: 72px;
+    padding-top: 40px;
+    border-top: 1.5px solid rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.ref-footer-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    color: rgba(26, 26, 26, 0.4);
+    line-height: 1.6;
+}
+
+.ref-footer-text strong {
+    color: rgba(26, 26, 26, 0.65);
+    font-weight: 600;
+}
+
+/* ─── Responsive ────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .ref-container {
+        padding: 0 36px;
+    }
+    .ref-header-title {
+        font-size: 3.5rem;
+        letter-spacing: -2px;
+    }
+}
+
+@media (max-width: 768px) {
+    .ref-page {
+        padding-top: 120px;
+        padding-bottom: 100px;
+    }
+    .ref-container {
+        padding: 0 24px;
+    }
+    .ref-header {
+        margin-bottom: 48px;
+        padding-bottom: 40px;
+    }
+    .ref-header-title {
+        font-size: 2.8rem;
+        letter-spacing: -1.5px;
+    }
+    .ref-header-subtitle {
+        font-size: 1rem;
+    }
+    .ref-card-header {
+        padding: 22px 24px 18px;
+    }
+    .ref-item {
+        padding: 16px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ref-container {
+        padding: 0 16px;
+    }
+    .ref-header-title {
+        font-size: 2.2rem;
+        letter-spacing: -1px;
+    }
+    .ref-card {
+        border-radius: 16px;
+    }
+    .ref-card-count {
+        display: none;
+    }
+}

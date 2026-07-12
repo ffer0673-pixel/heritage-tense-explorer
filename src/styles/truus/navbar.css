@@ -366,7 +366,7 @@
 .nav-menu-right {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 12px;
     height: 100%;
     z-index: 10;
 }
@@ -386,7 +386,91 @@
     align-items: center;
     justify-content: center;
     cursor: url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer !important;
-    transition: color 250ms cubic-bezier(0.25, 1, 0.5, 1);
+    transition: color 250ms cubic-bezier(0.25, 1, 0.5, 1), 
+                background-color 250ms cubic-bezier(0.25, 1, 0.5, 1), 
+                border-color 250ms cubic-bezier(0.25, 1, 0.5, 1), 
+                transform 250ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Colorful pill theme setups for desktop menu items */
+.menu-item-home {
+    background-color: #A93226 !important;
+    color: #ffffff !important;
+    border: 1.5px solid #A93226;
+    transition: background-color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.menu-item-home:hover {
+    background-color: #be3e32 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(169, 50, 38, 0.35);
+}
+.menu-item-home.active {
+    box-shadow: 0 6px 15px rgba(169, 50, 38, 0.45);
+    transform: translateY(-2px) scale(1.04);
+}
+
+.menu-item-tenses {
+    background-color: #D35400 !important;
+    color: #ffffff !important;
+    border: 1.5px solid #D35400;
+    transition: background-color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.menu-item-tenses:hover {
+    background-color: #e65c00 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(211, 84, 0, 0.35);
+}
+.menu-item-tenses.active {
+    box-shadow: 0 6px 15px rgba(211, 84, 0, 0.45);
+    transform: translateY(-2px) scale(1.04);
+}
+
+.menu-item-quiz {
+    background-color: #2471A3 !important;
+    color: #ffffff !important;
+    border: 1.5px solid #2471A3;
+    transition: background-color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.menu-item-quiz:hover {
+    background-color: #2e8bca !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(36, 113, 163, 0.35);
+}
+.menu-item-quiz.active {
+    box-shadow: 0 6px 15px rgba(36, 113, 163, 0.45);
+    transform: translateY(-2px) scale(1.04);
+}
+
+.menu-item-progress {
+    background-color: #196F3D !important;
+    color: #ffffff !important;
+    border: 1.5px solid #196F3D;
+    transition: background-color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.menu-item-progress:hover {
+    background-color: #1f8b4c !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(25, 111, 61, 0.35);
+}
+.menu-item-progress.active {
+    box-shadow: 0 6px 15px rgba(25, 111, 61, 0.45);
+    transform: translateY(-2px) scale(1.04);
+}
+
+.menu-item-reference {
+    background-color: #7D3C98 !important;
+    color: #ffffff !important;
+    border: 1.5px solid #7D3C98;
+    transition: background-color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.menu-item-reference:hover {
+    background-color: #9349b1 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(125, 60, 152, 0.35);
+}
+.menu-item-reference.active {
+    box-shadow: 0 6px 15px rgba(125, 60, 152, 0.45);
+    transform: translateY(-2px) scale(1.04);
 }
 
 /* Adapt default text colors depending on backdrop theme */

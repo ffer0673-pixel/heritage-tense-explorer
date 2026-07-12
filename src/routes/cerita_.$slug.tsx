@@ -186,23 +186,7 @@ function StoryPage() {
 
             <h1 className="story-reader-title">{story.title}</h1>
             
-            {/* Premium badge */}
-            <div className="flex justify-center">
-              {(() => {
-                const parts = story.tenseFocus.split(/\s*&\s*/);
-                return (
-                  <div className="story-reader-badge">
-                    <span>📖 {parts[0]}</span>
-                    {parts[1] && (
-                      <>
-                        <span className="story-reader-badge-ampersand">&</span>
-                        <span>{parts[1]}</span>
-                      </>
-                    )}
-                  </div>
-                );
-              })()}
-            </div>
+
 
             <article className="story-reader-body border-t border-border/40 pt-10">
               {story.body.map((p, i) => (

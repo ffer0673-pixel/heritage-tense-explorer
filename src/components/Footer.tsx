@@ -111,24 +111,7 @@ export function Footer() {
 
     return (
         <>
-            {/* Call to Action Section */}
-            {isHome && (
-                <section className="footer-cta-section">
-                    <div className="footer-cta-container">
-                        <h2 className="footer-cta-title">Ready to Master All 16 <span className="italic-text">English Tenses</span>?</h2>
-                        <p className="footer-cta-subtitle">
-                            Continue your English learning journey through Tangerang's stories, culture, and local wisdom.
-                        </p>
-                        <Link
-                            to="/quiz"
-                            className="footer-cta-btn"
-                            style={{ cursor: "url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer" }}
-                        >
-                            Start Learning
-                        </Link>
-                    </div>
-                </section>
-            )}
+
 
             {/* Main Footer wrapper */}
             <footer className="main-footer">

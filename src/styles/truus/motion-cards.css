@@ -177,7 +177,7 @@
 /* Above the line (Y: calc(52% + 15px)) */
 .floema-slide__index {
     position: absolute;
-    left: 100px;
+    left: 50px;
     bottom: calc(52% + 15px);
     font-family: 'DM Sans', sans-serif;
     font-size: 1.2rem;
@@ -204,18 +204,50 @@
     color: #1a1a1a;
     background: #ffffff;
     padding: 6px 12px;
-    border-radius: 4px;
+    border-radius: 12px;
     border: 1px solid rgba(26, 26, 26, 0.08);
     margin: 0;
     display: inline-block;
     pointer-events: auto;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease;
+}
+
+/* Custom distinct colors for each slide's title capsule */
+.floema-slide--0 .floema-slide__title-capsule {
+    background: #A93226; /* Crimson Heritage Red */
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.floema-slide--1 .floema-slide__title-capsule {
+    background: #D35400; /* Lantern Orange */
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.floema-slide--2 .floema-slide__title-capsule {
+    background: #2471A3; /* River Blue */
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.floema-slide--3 .floema-slide__title-capsule {
+    background: #196F3D; /* Culinary Green */
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.floema-slide--4 .floema-slide__title-capsule {
+    background: #7D3C98; /* Royal Purple */
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Below the line (Y: calc(48% - 20px)) */
 .floema-slide__progress-label {
     position: absolute;
-    left: 100px;
+    left: 50px;
     top: calc(48% + 20px);
     font-family: 'DM Sans', sans-serif;
     font-size: 0.8rem;
@@ -250,12 +282,13 @@
 
 .floema-slide__desc {
     font-family: 'DM Sans', sans-serif;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    font-weight: 400;
+    font-size: 1.6rem;
+    line-height: 1.5;
+    font-weight: 700;
     margin: 0;
-    color: rgba(255, 255, 255, 0.8);
-    max-width: 520px;
+    margin-bottom: 24px;
+    color: #ffffff;
+    max-width: 580px;
 }
 
 /* Interactive Example sentence box */
@@ -328,8 +361,7 @@
 .floema-bottom-prompt {
     position: absolute;
     bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 32%;
     z-index: 30;
     pointer-events: none;
 }
@@ -341,13 +373,6 @@
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #ffffff;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    padding: 10px 20px;
-    border-radius: 20px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 /* Responsive Media Queries */
@@ -413,7 +438,9 @@
     }
     
     .floema-slide__desc {
-        font-size: 1rem;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 16px;
     }
     
     .floema-slide__example {

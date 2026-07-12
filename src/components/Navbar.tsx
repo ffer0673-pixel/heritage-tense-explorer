@@ -8,7 +8,6 @@ const NAV_ITEMS = [
   { to: "/", label: "Home" },
   { to: "/tenses", label: "Tenses" },
   { to: "/quiz", label: "Quiz" },
-  { to: "/cerita", label: "Cerita" },
   { to: "/progress", label: "Progress" },
   { to: "/reference", label: "Reference" },
 ] as const;
@@ -133,8 +132,6 @@ export function Navbar() {
       <div className="navbar-wrapper">
         <motion.nav 
           className={cn("navbar", scrolled && "navbar--scrolled")}
-          whileHover={isMobile ? undefined : { scale: 1.015 }}
-          transition={{ type: "spring", stiffness: 400, damping: 30 }}
         >
           {/* Brand Logo "TensesAroundUs" placed inside nav for flex alignment */}
           <div className="navbar-logo-container">
@@ -189,6 +186,7 @@ export function Navbar() {
                   activeOptions={{ exact: item.to === "/" }}
                   className={cn(
                     "nav-menu-item",
+                    `menu-item-${item.label.toLowerCase()}`,
                     isActive && "active"
                   )}
                   style={{ cursor: "url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer" }}
@@ -224,7 +222,7 @@ export function Navbar() {
               onClick={() => setMobileOpen(false)}
               activeOptions={{ exact: item.to === "/" }}
               activeProps={{ className: 'active' }}
-              className="nav-mobile-item"
+              className={cn("nav-mobile-item", `menu-item-${item.label.toLowerCase()}`)}
               style={{ cursor: "url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer" }}
             >
               {item.label}
