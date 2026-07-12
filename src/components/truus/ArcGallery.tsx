@@ -14,7 +14,7 @@ interface ArcGalleryProps {
 
 export default function ArcGallery({
     itemsCount,
-    scrollMultiplier = 1.2,
+    scrollMultiplier = 0.65,
     arcAmplitude = 70,
     cardWidth = 220,
     cardGap = 20,
@@ -38,9 +38,9 @@ export default function ArcGallery({
     // ── Scroll-driven movement ────────────────────────────────────────────
     const { scrollY } = useScroll();
     const smoothedScrollY = useSpring(scrollY, {
-        damping: 40,
-        stiffness: 300,
-        mass: 0.3,
+        damping: 55,
+        stiffness: 80,
+        mass: 0.8,
     });
 
     // ── Card position updater (imperative, runs on every scroll/drag tick) ──

@@ -20,18 +20,21 @@ export default function CursorBubble() {
         };
 
         const onMouseOver = (e: MouseEvent) => {
-            const targetSelector = '.footer-column h3, .footer-links-list a, .footer-info-list li, .single-social, .logo-truus, .nav-work-btn';
+            const targetSelector = 'a, button, [role="button"], input[type="submit"], input[type="button"], select, .cursor-pointer, .logo-truus, .nav-work-btn, .footer-column h3, .footer-info-list li';
             const target = e.target as HTMLElement | null;
             const found = target ? target.closest(targetSelector) : null;
 
-            if (found && !isHoveringClickable) {
-                isHoveringClickable = true;
-                if (found.matches('.logo-truus')) cursorBubble.textContent = 'to home';
-                else if (found.matches('.nav-work-btn')) cursorBubble.textContent = 'click';
-                else cursorBubble.textContent = 'click';
-                gsap.killTweensOf(cursorBubble, 'opacity,scale,rotation');
-                gsap.to(cursorBubble, { opacity: 1, scale: 1, rotation: 0, duration: 1.7, delay: 0.1, ease: 'elastic.out(1, 0.4)' });
-            } else if (!found && isHoveringClickable) {
+            if (found) {
+                const text = found.matches('.logo-truus') ? 'to home' : 'pencet';
+                if (cursorBubble.textContent !== text) {
+                    cursorBubble.textContent = text;
+                }
+                if (!isHoveringClickable) {
+                    isHoveringClickable = true;
+                    gsap.killTweensOf(cursorBubble, 'opacity,scale,rotation');
+                    gsap.to(cursorBubble, { opacity: 1, scale: 1, rotation: 0, duration: 1.7, delay: 0.1, ease: 'elastic.out(1, 0.4)' });
+                }
+            } else if (isHoveringClickable) {
                 isHoveringClickable = false;
                 gsap.killTweensOf(cursorBubble, 'opacity,scale,rotation');
                 gsap.to(cursorBubble, { opacity: 1, scale: 0, rotation: -30, duration: 0.3, ease: 'sine.inOut' });
@@ -57,5 +60,5 @@ export default function CursorBubble() {
         };
     }, []);
 
-    return <div className="cursor-bubble">click</div>;
+    return <div className="cursor-bubble">pencet</div>;
 }

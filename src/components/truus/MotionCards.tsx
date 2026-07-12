@@ -2,242 +2,245 @@
 
 import gsap from "gsap";
 import React, { useEffect, useRef } from "react";
-import { InertiaPlugin } from "gsap/InertiaPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { CULTURAL_CARDS } from "@/data/cultural";
+import { Link } from "@tanstack/react-router";
 
-gsap.registerPlugin(InertiaPlugin, ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
 export default function MotionCards() {
-    const sectionRef = useRef<HTMLElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const imgRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const progressBarRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            // Inertia on cards
-            const cards = document.querySelectorAll(".motion-card__card");
-            cards.forEach((card) => {
-                let lastX = 0;
-                let lastY = 0;
-                let speedX = 0;
-                let speedY = 0;
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
 
-                const startRotation = gsap.getProperty(card, "rotation");
-                const startX = gsap.getProperty(card, "x");
-                const startY = gsap.getProperty(card, "y");
+    const ctx = gsap.context(() => {
+      // Initialize starting values
+      // Slide 0 is the base layer, visible initially
+      gsap.set(slideRefs.current[0], { "--reveal": 0 });
+      gsap.set(contentRefs.current[0], { opacity: 1, y: 0 });
+      
+      // Slides 1-4 start hidden
+      for (let i = 1; i < 5; i++) {
+        gsap.set(slideRefs.current[i], { "--reveal": 100 });
+        gsap.set(contentRefs.current[i], { opacity: 0, y: 30 });
+      }
 
-                const onMove = (e: MouseEvent) => {
-                    speedX = e.clientX - lastX;
-                    speedY = e.clientY - lastY;
-                    lastX = e.clientX;
-                    lastY = e.clientY;
-                };
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: "+=400%", // 400% of viewport height (4 transition steps)
+          scrub: true,
+          pin: true,
+          anticipatePin: 1,
+        },
+      });
 
-                const onEnter = (e: MouseEvent) => {
-                    speedX = 0;
-                    speedY = 0;
-                    lastX = e.clientX;
-                    lastY = e.clientY;
-                };
+      // 1. Transition to Slide 1
+      tl.to(slideRefs.current[1], {
+        "--reveal": 0,
+        duration: 1.0,
+        ease: "none",
+      }, 0.0);
+      tl.to(contentRefs.current[0], {
+        opacity: 0,
+        y: -30,
+        duration: 0.4,
+        ease: "power1.inOut",
+      }, 0.0);
+      tl.to(contentRefs.current[1], {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        ease: "power1.inOut",
+      }, 0.6);
 
-                const onLeave = () => {
-                    gsap.to(card, {
-                        inertia: {
-                            x: { velocity: speedX * 20, end: startX },
-                            y: { velocity: speedY * 20, end: startY },
-                            rotation: { velocity: speedX * 1.5, end: startRotation },
-                        },
-                    });
-                };
+      // 2. Transition to Slide 2
+      tl.to(slideRefs.current[2], {
+        "--reveal": 0,
+        duration: 1.0,
+        ease: "none",
+      }, 1.0);
+      tl.to(contentRefs.current[1], {
+        opacity: 0,
+        y: -30,
+        duration: 0.4,
+        ease: "power1.inOut",
+      }, 1.0);
+      tl.to(contentRefs.current[2], {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        ease: "power1.inOut",
+      }, 1.6);
 
-                card.addEventListener("mousemove", onMove as EventListener);
-                card.addEventListener("mouseenter", onEnter as EventListener);
-                card.addEventListener("mouseleave", onLeave);
-            });
+      // 3. Transition to Slide 3
+      tl.to(slideRefs.current[3], {
+        "--reveal": 0,
+        duration: 1.0,
+        ease: "none",
+      }, 2.0);
+      tl.to(contentRefs.current[2], {
+        opacity: 0,
+        y: -30,
+        duration: 0.4,
+        ease: "power1.inOut",
+      }, 2.0);
+      tl.to(contentRefs.current[3], {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        ease: "power1.inOut",
+      }, 2.6);
 
-            // Inertia on floating labels
-            const labels = document.querySelectorAll(".motion-card__floating-label");
-            labels.forEach((label) => {
-                let lastX = 0;
-                let lastY = 0;
-                let speedX = 0;
-                let speedY = 0;
+      // 4. Transition to Slide 4
+      tl.to(slideRefs.current[4], {
+        "--reveal": 0,
+        duration: 1.0,
+        ease: "none",
+      }, 3.0);
+      tl.to(contentRefs.current[3], {
+        opacity: 0,
+        y: -30,
+        duration: 0.4,
+        ease: "power1.inOut",
+      }, 3.0);
+      tl.to(contentRefs.current[4], {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        ease: "power1.inOut",
+      }, 3.6);
 
-                const startRotation = gsap.getProperty(label, "rotation");
-                const startX = gsap.getProperty(label, "x");
-                const startY = gsap.getProperty(label, "y");
+      // 5. Image Pan & Zoom Parallax
+      CULTURAL_CARDS.forEach((_, i) => {
+        const startOffset = i === 0 ? 0 : i - 1;
+        tl.to(imgRefs.current[i], {
+          scale: 1.05,
+          y: -40,
+          duration: 1.5,
+          ease: "none",
+        }, startOffset);
+      });
 
-                const onMove = (e: MouseEvent) => {
-                    speedX = e.clientX - lastX;
-                    speedY = e.clientY - lastY;
-                    lastX = e.clientX;
-                    lastY = e.clientY;
-                };
+      // 6. Global horizontal progress line
+      tl.to(progressBarRef.current, {
+        width: "100%",
+        duration: 4.0,
+        ease: "none",
+      }, 0);
 
-                const onEnter = (e: MouseEvent) => {
-                    speedX = 0;
-                    speedY = 0;
-                    lastX = e.clientX;
-                    lastY = e.clientY;
-                };
+    }, section);
 
-                const onLeave = () => {
-                    gsap.to(label, {
-                        inertia: {
-                            x: { velocity: speedX * 25, end: startX },
-                            y: { velocity: speedY * 25, end: startY },
-                            rotation: { velocity: speedX * 2, end: startRotation },
-                        },
-                    });
-                };
+    return () => ctx.revert();
+  }, []);
 
-                label.addEventListener("mousemove", onMove as EventListener);
-                label.addEventListener("mouseenter", onEnter as EventListener);
-                label.addEventListener("mouseleave", onLeave);
-            });
+  return (
+    <section
+      ref={sectionRef}
+      className="motion-card-section floema-collections-section"
+      id="motion-card-section"
+    >
+      <div className="floema-container">
+        {/* Global Horizontal Dividing Line (Middle of screen) */}
+        <div className="floema-global-divider">
+          <div
+            ref={progressBarRef}
+            className="floema-global-progress"
+          />
+        </div>
 
-            // Entry Animations: Sticker Pop & Underline Draw
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top 70%",
-                    toggleActions: "play none none reverse"
-                }
-            });
+        {/* Slide Deck */}
+        <div className="floema-slides">
+          {CULTURAL_CARDS.map((card, i) => (
+            <div
+              key={card.slug}
+              className={`floema-slide floema-slide--${i}`}
+            >
+              {/* Media container with custom reveal property */}
+              <div
+                ref={(el) => { slideRefs.current[i] = el; }}
+                className="floema-slide__media"
+                style={{ "--reveal": 100 } as React.CSSProperties}
+              >
+                <div
+                  ref={(el) => { imgRefs.current[i] = el; }}
+                  className="floema-slide__media-inner"
+                >
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    className="floema-slide__image"
+                  />
+                </div>
+              </div>
 
-            const topStickerImg = sectionRef.current ? sectionRef.current.querySelector(".motion-card__sticker--top img") : null;
-            if (topStickerImg) {
-                gsap.set(topStickerImg, { scale: 0, opacity: 0, rotation: -30 });
-                tl.to(topStickerImg, { scale: 1, opacity: 1, rotation: 0, duration: 1.7, ease: "elastic.out(1, 0.4)" }, 0);
-            }
+              {/* Text content layout — structured on the Floema grid */}
+              <div
+                ref={(el) => { contentRefs.current[i] = el; }}
+                className="floema-slide__content"
+              >
+                {/* Top Row: Index */}
+                <span className="floema-slide__index">0{i + 1}</span>
+                
+                {/* Header group above the line containing Title inside capsule wrapper */}
+                <div className="floema-slide__header-group">
+                  <h3 className="floema-slide__title-capsule">{card.title}</h3>
+                </div>
 
-            const underlinePath = sectionRef.current ? sectionRef.current.querySelector(".motion-card__underline-path") as SVGPathElement | null : null;
-            if (underlinePath) {
-                const pathLen = underlinePath.getTotalLength();
-                gsap.set(underlinePath, { strokeDasharray: pathLen, strokeDashoffset: pathLen });
-                tl.to(underlinePath, { strokeDashoffset: 0, duration: 1.5, ease: "power2.out" }, 0.2);
-            }
-        }, sectionRef);
+                {/* Bottom Row Left: Slogan / Sidetext */}
+                <span className="floema-slide__progress-label">
+                  Tenses Around Us
+                </span>
 
-        return () => ctx.revert();
-    }, []);
+                {/* Bottom Row Right: Description, Example, and CTA Button */}
+                <div className="floema-slide__body">
+                  <p className="floema-slide__desc">{card.short}</p>
 
-    return (
-        <section
-            ref={sectionRef}
-            className="motion-card-section" id="motion-card-section">
-            {/* ─── Part 1: Bold Heading Text with SVG Sticker Placeholders ─── */}
-            <div className="motion-card__heading">
-                <h2 className="motion-card__title">
-                    Master English
-                    <br />
-                    One Tense
-                    <br />
-                    At A Time
-                </h2>
-                <p className="motion-card__subtitle">
-                    Through Tangerang Local Wisdom.
-                    {/* SVG sticker placeholder — top-right area */}
-                    <span className="motion-card__sticker motion-card__sticker--top">
-                        <img
-                            src="/assets/Footer-Sticker SVG/footer-sticker-hands.svg"
-                            alt="Green heart hands sticker"
-                            className="motion-card__sticker-img"
-                        />
+                  {/* Interactive Example sentence box */}
+                  <div className="floema-slide__example">
+                    <span className="floema-slide__example-label">
+                      Example Sentence:
                     </span>
-                </p>
-                <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 634 28" fill="none" className="motion-card__underline-svg">
-                    <path className="motion-card__underline-path" d="M2 26C41.0237 23.1556 79.9927 19.9419 118.634 15.5521C169.106 9.98633 227.314 2.42393 275.206 2C280.46 2.57436 264.768 4.99488 262.462 5.55556C257.837 6.43078 252.529 7.47009 247.317 8.59146C239.594 10.3556 212.496 15.8393 226.932 19.8051C239.594 22.6359 263.663 21.9521 280.978 21.3504C314.817 19.9829 349.311 16.7419 383.204 14.7863C465.931 9.5077 549.191 10.547 632 14.1436" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-            </div>
+                    <p className="floema-slide__example-text">
+                      "{card.exampleEn}"
+                    </p>
+                  </div>
 
-            {/* ─── Part 2: Cards with Colorful Bars & Blue Blob ─── */}
-            <div className="motion-card__cards-area">
-                {/* Blue SVG blob behind everything */}
-                <div className="motion-card__blob">
-                    <img
-                        src="/assets/MotionCard SVG/motion-card-blob.svg"
-                        alt=""
-                        className="motion-card__blob-svg"
-                    />
+                  <div className="floema-slide__cta-wrapper">
+                    <Link
+                      to="/cerita/$slug"
+                      params={{ slug: card.slug }}
+                      className="floema-slide__cta"
+                      style={{ cursor: "url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer" }}
+                    >
+                      <span className="floema-slide__cta-text">
+                        Explore {card.title}
+                      </span>
+                      <span className="floema-slide__cta-icon">
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M1 9L9 1M9 1H3M9 1V7" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </span>
+                    </Link>
+                  </div>
                 </div>
-
-
-                {/* 4 Photo Cards */}
-                <div ref={containerRef} className="motion-card__cards">
-                    <div className="motion-card__card motion-card__card--1">
-                        <div className="motion-card__card-image">
-                            <img
-                                src="https://cdn.prod.website-files.com/683703490bc01e1b8c052e06/686b8e614494dac669a4099c_c310914b5a1a573b4c7499e9531f8d52_DE.avif"
-                                loading="lazy"
-                                width={1000}
-                                height={1000}
-                                alt=""
-                                className="cover-image"
-                            />
-                        </div>
-                    </div>
-
-                    <div className="motion-card__card motion-card__card--2">
-                        <div className="motion-card__card-image">
-                            <img
-                                src="https://cdn.prod.website-files.com/683703490bc01e1b8c052e06/686b8e607142a7a25157d9dd_1875b9852ca289170917f9060c95b6a4_BolpuntJapie.avif"
-                                loading="lazy"
-                                width={1000}
-                                height={1000}
-                                alt=""
-                                className="cover-image"
-                            />
-                        </div>
-                    </div>
-
-                    <div className="motion-card__card motion-card__card--3">
-                        <div className="motion-card__card-image">
-                            <img
-                                src="https://cdn.prod.website-files.com/683703490bc01e1b8c052e06/686b8e60ba19eb1109d3daa5_b1280272f47b3cd3ea25b91391935efa_RonaldoMassage.avif"
-                                loading="lazy"
-                                width={1000}
-                                height={1000}
-                                alt=""
-                                className="cover-image"
-                            />
-                        </div>
-                    </div>
-
-                    <div className="motion-card__card motion-card__card--4">
-                        <div className="motion-card__card-image">
-                            <img
-                                src="https://cdn.prod.website-files.com/683703490bc01e1b8c052e06/686b8e607d351d1335f06e04_f1aafb2150d81c3990c906d901d2e7e4_Esprix.avif"
-                                loading="lazy"
-                                width={1000}
-                                height={1000}
-                                alt=""
-                                className="cover-image"
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                {/* Floating labels — positioned freely over the cards area */}
-                <div ref={containerRef} className="motion-card__floating-labels">
-                    <div className="motion-card__floating-label motion-card__floating-label--pink">
-                        <p className="motion-card__floating-text">girls just wanna have fun!</p>
-                    </div>
-                    <div className="motion-card__floating-label motion-card__floating-label--orange">
-                        <p className="motion-card__floating-text">mainstream is not a dirty word</p>
-                    </div>
-                    <div className="motion-card__floating-label motion-card__floating-label--red">
-                        <p className="motion-card__floating-text">arrogance = old fashioned</p>
-                    </div>
-                </div>
+              </div>
             </div>
+          ))}
+        </div>
 
-            <div className="motion-card__footer-text">
-                <p className="motion-card__description">
-                    Learn English tenses in a completely new way. We explore grammar
-                    structures by diving deep into the cultural landmarks, local
-                    culinary delights, and historical stories of Tangerang.
-                </p>
-            </div>
-        </section>
-    );
+        {/* Floating bottom prompt */}
+        <div className="floema-bottom-prompt">
+          <span className="floema-bottom-text">Scroll to explore ↓</span>
+        </div>
+      </div>
+    </section>
+  );
 }

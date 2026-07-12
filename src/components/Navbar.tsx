@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { gsap } from "gsap";
+import { motion } from "framer-motion";
 
 const NAV_ITEMS = [
   { to: "/", label: "Home" },
@@ -36,6 +37,7 @@ function initWiggle(element: HTMLElement | Element, intensity: number) {
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   // Close mobile menu on route change
@@ -43,8 +45,17 @@ export function Navbar() {
     setMobileOpen(false);
   }, [pathname]);
 
+  // Track responsive screen size
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   useEffect(() => {
     const navbar = document.querySelector('.navbar') as HTMLElement | null;
+    let ticking = false;
 
     const updateNavbarColor = () => {
       if (!navbar) return;
@@ -65,91 +76,143 @@ export function Navbar() {
 
       // Home page adaptive scroll color logic
       const scrollPos = window.scrollY + navbar.offsetHeight / 2;
-      const contentSection = document.querySelector('.content-section');
-      const footerEl = document.querySelector('.main-footer');
-      if (!contentSection || !footerEl) return;
-
-      const contentTop = contentSection.getBoundingClientRect().top + window.scrollY;
-
-      const showreelSection = document.querySelector('#showreel-section');
-      const showreelTop = showreelSection ? showreelSection.getBoundingClientRect().top + window.scrollY : Infinity;
-
-      const serviceCardsSection = document.querySelector('.service-cards-wrapper');
-      const serviceCardsTop = serviceCardsSection ? serviceCardsSection.getBoundingClientRect().top + window.scrollY : Infinity;
-
       const doubleMarquee = document.querySelector('.Double-marquee');
-      const doubleMarqueeTop = doubleMarquee ? doubleMarquee.getBoundingClientRect().top + window.scrollY : Infinity;
+      const footerEl = document.querySelector('.main-footer');
+      if (!doubleMarquee || !footerEl) return;
+
+      const doubleMarqueeTop = doubleMarquee.getBoundingClientRect().top + window.scrollY;
       const footerTop = footerEl.getBoundingClientRect().top + window.scrollY;
 
       if (scrollPos >= footerTop) {
         navbar.classList.add('on-dark'); navbar.classList.remove('on-light');
       } else if (scrollPos >= doubleMarqueeTop) {
         navbar.classList.add('on-light'); navbar.classList.remove('on-dark');
-      } else if (scrollPos >= serviceCardsTop) {
-        navbar.classList.add('on-light'); navbar.classList.remove('on-dark');
-      } else if (scrollPos >= showreelTop) {
-        navbar.classList.add('on-dark'); navbar.classList.remove('on-light');
-      } else if (scrollPos >= contentTop) {
-        navbar.classList.add('on-light'); navbar.classList.remove('on-dark');
       } else {
         navbar.classList.add('on-dark'); navbar.classList.remove('on-light');
       }
     };
 
-    const handleScrollState = () => {
-      setScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateNavbarColor();
+          setScrolled(window.scrollY > 20);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener('scroll', updateNavbarColor);
-    window.addEventListener('scroll', handleScrollState);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     updateNavbarColor();
-    handleScrollState();
+    setScrolled(window.scrollY > 20);
 
-    // Wiggle hover animations
+    // Wiggle hover animation for mobile hamburger only
     const cleanups: (() => void)[] = [];
-    const menuItems = document.querySelectorAll('.nav-menu-item, .nav-hamburger');
-    menuItems.forEach(item => {
-      cleanups.push(initWiggle(item, 2.5));
-    });
+    const mobileHam = document.querySelector('.nav-hamburger');
+    if (mobileHam) {
+      cleanups.push(initWiggle(mobileHam, 2.5));
+    }
 
     return () => {
-      window.removeEventListener('scroll', updateNavbarColor);
-      window.removeEventListener('scroll', handleScrollState);
+      window.removeEventListener('scroll', handleScroll);
       cleanups.forEach(fn => fn && fn());
     };
   }, [pathname]);
 
+  const getIsActive = (to: string) => {
+    if (to === "/") {
+      return pathname === "/";
+    }
+    return pathname === to || pathname.startsWith(to + "/");
+  };
+
   return (
     <>
       <div className="nav-overlay"></div>
-      <nav className={cn("navbar", scrolled && "navbar--scrolled")}>
-        {/* Navigation Items (Right Aligned) */}
-        <div className="nav-menu-right">
-          {NAV_ITEMS.map(item => (
-            <Link
-              key={item.to}
-              to={item.to}
-              activeOptions={{ exact: item.to === "/" }}
-              activeProps={{ className: 'active' }}
-              className="nav-menu-item"
+      <div className="navbar-wrapper">
+        <motion.nav 
+          className={cn("navbar", scrolled && "navbar--scrolled")}
+          whileHover={isMobile ? undefined : { scale: 1.015 }}
+          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+        >
+          {/* Brand Logo "TensesAroundUs" placed inside nav for flex alignment */}
+          <div className="navbar-logo-container">
+            <Link 
+              to="/" 
+              className="navbar-logo-link" 
               style={{ cursor: "url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer" }}
             >
-              {item.label}
-            </Link>
-          ))}
-        </div>
+              <h1 className="navbar-logo__title">
+                <span className="navbar-logo__word is--relative">
+                  <span>Tenses</span>
+                  <div className="navbar-logo__smiley">
+                    <img
+                      src="/assets/VimeoHero SVG/smiley-face.svg"
+                      alt=""
+                      className="navbar-logo__smiley-svg"
+                    />
+                  </div>
+                </span>
 
-        {/* Mobile Hamburger Button */}
-        <button
-          onClick={() => setMobileOpen(prev => !prev)}
-          className={cn("nav-hamburger", mobileOpen && "open")}
-          aria-label="Toggle Menu"
-          style={{ cursor: "url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer" }}
-        >
-          <span></span>
-          <span></span>
-        </button>
-      </nav>
+                <span className="navbar-logo__word is--relative">
+                  <div className="navbar-logo__star">
+                    <div className="navbar-logo__star-inner">
+                      <img
+                        src="/assets/VimeoHero SVG/pink-star.svg"
+                        alt=""
+                        className="navbar-logo__star-svg"
+                      />
+                    </div>
+                  </div>
+                  {/* Oval underline */}
+                  <img
+                    src="/assets/VimeoHero SVG/oval-underline.svg"
+                    alt=""
+                    className="navbar-logo__underline-svg"
+                  />
+                  <span>AroundUs</span>
+                </span>
+              </h1>
+            </Link>
+          </div>
+
+          {/* Navigation Items */}
+          <div className="nav-menu-right">
+            {NAV_ITEMS.map((item) => {
+              const isActive = getIsActive(item.to);
+
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  activeOptions={{ exact: item.to === "/" }}
+                  className={cn(
+                    "nav-menu-item",
+                    isActive && "active"
+                  )}
+                  style={{ cursor: "url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer" }}
+                >
+                  <span className="nav-item-text">
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Mobile Hamburger Button */}
+          <button
+            onClick={() => setMobileOpen(prev => !prev)}
+            className={cn("nav-hamburger", mobileOpen && "open")}
+            aria-label="Toggle Menu"
+            style={{ cursor: "url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer" }}
+          >
+            <span></span>
+            <span></span>
+          </button>
+        </motion.nav>
+      </div>
 
       {/* Mobile Fullscreen Menu Overlay */}
       <div className={cn("nav-mobile-overlay", mobileOpen && "open")}>

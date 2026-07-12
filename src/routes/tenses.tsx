@@ -20,9 +20,10 @@ export const Route = createFileRoute("/tenses")({
 const LOOP_TENSES = [...TENSES, ...TENSES, ...TENSES];
 
 const getTenseDisplayName = (name: string) => {
-    if (name === "Simple Present") return "Present";
-    if (name === "Simple Past") return "Past";
-    if (name === "Simple Future") return "Future";
+    if (name === "Simple Present") return "Simple Present";
+    if (name === "Simple Past") return "Simple Past";
+    if (name === "Simple Future") return "Simple Future";
+    if (name === "Past Future") return "Simple Past Future";
     return name;
 };
 

@@ -113,8 +113,8 @@ function parseFormulaToGroups(formulaStr: string): FormulaGroup[] {
 
 const CATEGORY_PALETTE: Record<TenseCategory, { bg: string; accent: string; text: string; border: string }> = {
   present: { bg: "#e6fab9", accent: "#29725f", text: "#1e5c3f", border: "rgba(41,114,95,0.15)" },
-  past:    { bg: "#f0befa", accent: "#a0325a", text: "#6b1a3a", border: "rgba(160,50,90,0.15)" },
-  future:  { bg: "#82a0ff", accent: "#4b69f0", text: "#ffffff", border: "rgba(75,105,240,0.2)" },
+  past: { bg: "#f0befa", accent: "#a0325a", text: "#6b1a3a", border: "rgba(160,50,90,0.15)" },
+  future: { bg: "#82a0ff", accent: "#4b69f0", text: "#ffffff", border: "rgba(75,105,240,0.2)" },
   "past-future": { bg: "#f5693c", accent: "#c94a1a", text: "#ffffff", border: "rgba(245,105,60,0.2)" },
 };
 
@@ -242,10 +242,10 @@ function OverviewSection({ tense }: TenseProp) {
 // ─── Formula ──────────────────────────────────────────────────────────────────
 
 const FORMULA_TYPES = [
-  { key: "positive",             label: "Positive" },
-  { key: "negative",             label: "Negative" },
-  { key: "interrogative",        label: "Interrogative" },
-  { key: "negativeInterrogative",label: "Negative Interrogative" },
+  { key: "positive", label: "Positive" },
+  { key: "negative", label: "Negative" },
+  { key: "interrogative", label: "Interrogative" },
+  { key: "negativeInterrogative", label: "Negative Interrogative" },
 ] as const;
 
 function FormulaSection({ tense }: TenseProp) {
@@ -259,7 +259,7 @@ function FormulaSection({ tense }: TenseProp) {
         {FORMULA_TYPES.map(({ key, label }) => {
           const formulaStr = tense.formula[key];
           const groups = parseFormulaToGroups(formulaStr);
-          
+
           let cardColorClass = "";
           let labelColor = "rgba(0, 0, 0, 0.4)";
           let formulaColor = "#111111";
@@ -341,10 +341,10 @@ function FormulaSection({ tense }: TenseProp) {
 // ─── Examples ─────────────────────────────────────────────────────────────────
 
 const EXAMPLE_CATS = [
-  { title: "Positive",              key: "positive" },
-  { title: "Negative",              key: "negative" },
-  { title: "Interrogative",         key: "interrogative" },
-  { title: "Negative Interrogative",key: "negativeInterrogative" },
+  { title: "Positive", key: "positive" },
+  { title: "Negative", key: "negative" },
+  { title: "Interrogative", key: "interrogative" },
+  { title: "Negative Interrogative", key: "negativeInterrogative" },
 ] as const;
 
 function ExamplesSection({ tense }: TenseProp) {
@@ -592,7 +592,7 @@ function QuizCtaSection({ tense }: TenseProp) {
           fontSize: "0.6875rem",
           textTransform: "uppercase",
           letterSpacing: "0.15em",
-          color: "#f5693c",
+          color: "#d00973ff",
           marginBottom: "1rem",
         }}>
           Ready to test?

@@ -1,11 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import VimeoHero from "@/components/truus/VimeoHero";
-import HorizontalWords from "@/components/truus/HorizontalWords";
-import MotionCards from "@/components/truus/MotionCards";
-import Showreel from "@/components/truus/Showreel";
 import ServiceCards from "@/components/truus/ServiceCards";
-import DoubleMarquee from "@/components/truus/DoubleMarquee";
 import TransitionScribble from "@/components/truus/TransitionScribble";
+import MotionCards from "@/components/truus/MotionCards";
+import PersistentPortraits from "@/components/truus/PersistentPortraits";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -22,16 +20,16 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <>
-      <header className="main-header">
+      <section id="hero" className="main-header">
         <VimeoHero />
-      </header>
-      <HorizontalWords />
-      <DoubleMarquee />
+        <PersistentPortraits />
+      </section>
+
+      <section id="image-reveal">
+        <MotionCards />
+      </section>
+
       <main>
-        <div className="content-section motion-cards-wrapper">
-          <MotionCards />
-        </div>
-        <Showreel />
         <div className="content-section service-cards-wrapper">
           <ServiceCards />
         </div>

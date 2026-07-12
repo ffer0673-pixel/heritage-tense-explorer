@@ -125,8 +125,8 @@ function StoryPage() {
   const progressPercent = showQuiz && !done ? Math.round((step / analysis.length) * 100) : done ? 100 : 0;
 
   return (
-    <div className="quiz-runner-container">
-      <div className="quiz-runner-card">
+    <div className="story-reader-container">
+      <div className="story-reader-card">
         {/* Decal stickers */}
         <img
           src="/assets/Card-Sticker SVG/sticker-smiley.svg"
@@ -143,6 +143,23 @@ function StoryPage() {
 
         <div className="quiz-runner-meta">
           <Link to="/cerita" className="quiz-runner-back">← Semua cerita</Link>
+          {!showQuiz && !done && (
+            <button
+              onClick={toggleNarration}
+              aria-label={isSpeaking ? "Stop narration" : "Play narration"}
+              className="truus-btn truus-btn-outline shrink-0 py-1.5 px-4 text-xs font-semibold rounded-full flex items-center gap-2 border border-border"
+            >
+              {isSpeaking ? (
+                <>
+                  <Square className="h-3 w-3" /> Stop
+                </>
+              ) : (
+                <>
+                  <Volume2 className="h-3.5 w-3.5" /> Dengarkan
+                </>
+              )}
+            </button>
+          )}
           {showQuiz && !done && <span>{step + 1} / {analysis.length}</span>}
         </div>
 
@@ -153,51 +170,54 @@ function StoryPage() {
         )}
 
         {!showQuiz && !done && (
-          <div className="pt-4">
-            <div className="flex items-start justify-between gap-4 flex-wrap">
-              <div className="text-7xl">
-                {story.image ? (
-                  <img
-                    src={story.image}
-                    alt={story.title}
-                    className="w-24 h-24 object-cover rounded-2xl shadow-sm"
-                  />
-                ) : (
-                  <div className="w-24 h-24 bg-muted rounded-2xl flex items-center justify-center text-4xl">{story.cover}</div>
-                )}
-              </div>
-              <button
-                onClick={toggleNarration}
-                aria-label={isSpeaking ? "Stop narration" : "Play narration"}
-                className="truus-btn truus-btn-outline shrink-0"
-              >
-                {isSpeaking ? (
-                  <>
-                    <Square className="h-4 w-4" /> Stop
-                  </>
-                ) : (
-                  <>
-                    <Volume2 className="h-4 w-4" /> Dengarkan
-                  </>
-                )}
-              </button>
+          <div className="pt-2">
+            {/* Centered cover image */}
+            <div className="story-reader-cover-container">
+              {story.image ? (
+                <img
+                  src={story.image}
+                  alt={story.title}
+                  className="story-reader-cover-img"
+                />
+              ) : (
+                <div className="story-reader-cover-emoji">{story.cover}</div>
+              )}
             </div>
 
-            <h1 className="quiz-runner-question mt-6 mb-2">{story.title}</h1>
-            <div className="text-xs uppercase tracking-widest text-muted-foreground font-semibold mb-8">Tense focus: {story.tenseFocus}</div>
+            <h1 className="story-reader-title">{story.title}</h1>
+            
+            {/* Premium badge */}
+            <div className="flex justify-center">
+              {(() => {
+                const parts = story.tenseFocus.split(/\s*&\s*/);
+                return (
+                  <div className="story-reader-badge">
+                    <span>📖 {parts[0]}</span>
+                    {parts[1] && (
+                      <>
+                        <span className="story-reader-badge-ampersand">&</span>
+                        <span>{parts[1]}</span>
+                      </>
+                    )}
+                  </div>
+                );
+              })()}
+            </div>
 
-            <article className="font-serif text-lg leading-[1.85] space-y-6 text-foreground/90 max-w-2xl border-t border-border pt-6">
+            <article className="story-reader-body border-t border-border/40 pt-10">
               {story.body.map((p, i) => (
                 <p key={i}>{p}</p>
               ))}
             </article>
 
-            <button
-              onClick={() => setShowQuiz(true)}
-              className="truus-btn mt-10"
-            >
-              Mulai analisis tense <ArrowRight className="h-4 w-4" />
-            </button>
+            <div className="story-reader-cta">
+              <button
+                onClick={() => setShowQuiz(true)}
+                className="truus-btn py-4 px-8 text-base font-semibold rounded-full shadow-md hover:shadow-lg transition-all"
+              >
+                Mulai analisis tense <ArrowRight className="h-5 w-5" />
+              </button>
+            </div>
           </div>
         )}
 

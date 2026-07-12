@@ -1,10 +1,19 @@
-/* ─── Vimeo Hero ────────────────────────────────────────────────────────────── */
+/* Sticky parent section for overlay scroll effect */
+#hero {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
 
 /* The outer wrapper */
 .vimeo-hero {
     position: relative;
     width: calc(100% - 24px);
-    height: calc(100vh - 24px);
+    min-height: calc(100vh - 24px);
+    height: auto;
     margin: 12px auto;
     overflow: hidden;
     background-color: var(--bg-color);
@@ -146,5 +155,24 @@
 @keyframes draw-oval-underline {
     to {
         stroke-dashoffset: 0;
+    }
+}
+
+/* Layout MotionCards when placed inside VimeoHero */
+.vimeo-hero .motion-card-section {
+    position: relative;
+    width: 100%;
+    padding: 120px 20px 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    z-index: 3;
+}
+
+@media (max-width: 768px) {
+    .vimeo-hero .motion-card-section {
+        padding: 80px 10px 60px;
     }
 }

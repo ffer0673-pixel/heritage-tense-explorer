@@ -7,7 +7,6 @@
 @import './navbar.css';
 @import './hero.css';
 @import './motion-cards.css';
-@import './showreel.css';
 @import './cards.css';
 @import './quiz.css';
 @import './marquee.css';
@@ -15,5 +14,15 @@
 @import './vimeo-hero.css';
 @import './cursor.css';
 @import './responsive.css';
-@import './horizontal-words.css';
 @import './formula.css';
+@import './persistent-portraits.css';
+
+/* Stacking layout overrides for homepage section-over-section curtain overlay */
+.service-cards-wrapper,
+.main-footer {
+    position: relative;
+    z-index: 10;
+    background-color: var(--bg-color);
+}
+
+

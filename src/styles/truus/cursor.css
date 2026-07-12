@@ -17,6 +17,25 @@
     white-space: nowrap;
 }
 
+/* ─── Global Pointer Cursor Overrides ────────────────────────────────────── */
+a,
+button,
+[role="button"],
+input[type="submit"],
+input[type="button"],
+select,
+.cursor-pointer {
+    cursor: url('/assets/Cursor SVG/cursor-pointer.svg') 12 12, pointer !important;
+}
+
+/* Ensure children inherit the custom pointer cursor */
+a *,
+button *,
+[role="button"] *,
+.cursor-pointer * {
+    cursor: inherit !important;
+}
+
 /* ─── Page Transition Scribble ───────────────────────────────────────────── */
 .transition-scribble {
     position: fixed;

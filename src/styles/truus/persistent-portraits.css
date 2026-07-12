@@ -1,0 +1,200 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   src/styles/truus/persistent-portraits.css — Circular Floating Avatars
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.persistent-portraits-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2; /* Set to hover context within hero */
+    overflow: hidden;
+}
+
+.floating-portrait-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 116px;
+    height: 116px; /* Perfect 1:1 circular aspect ratio */
+    will-change: transform;
+    pointer-events: auto; /* Enable cursor events for hover and custom pointer */
+    cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+}
+
+.floating-portrait-card__inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%; /* Perfect circle style */
+    border: 3px solid #ffffff;
+    overflow: hidden;
+    background-color: #f3ede2;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15), 
+                0 15px 35px rgba(0, 0, 0, 0.25), 
+                inset 0 0 10px rgba(0, 0, 0, 0.1);
+    /* High quality GPU-accelerated transition curves */
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                filter 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.floating-portrait-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Hover effects for premium feeling */
+.floating-portrait-card:hover .floating-portrait-card__inner {
+    transform: scale(1.05); /* Soft scaling */
+    filter: brightness(1.08); /* Soft brightening */
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25), 
+                0 22px 45px rgba(0, 0, 0, 0.3), 
+                inset 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Active Highlight Glow */
+.floating-portrait-card.is-active .floating-portrait-card__inner {
+    border-color: #ffffff;
+    box-shadow: 0 0 0 4px #ffffff,
+                0 0 25px rgba(255, 255, 255, 0.6),
+                0 25px 50px rgba(0, 0, 0, 0.4);
+}
+
+/* ─── Profile Bio Card ───────────────────────────────────────────────────── */
+.profile-card {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.16);
+    z-index: 100;
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    cursor: default;
+}
+
+/* Desktop spacing (beside the portrait) */
+@media (min-width: 1024px) {
+    .profile-card {
+        left: calc(100% + 24px);
+        width: 320px;
+    }
+}
+
+/* Tablet spacing (beside the portrait, slightly larger) */
+@media (max-width: 1023px) and (min-width: 768px) {
+    .profile-card {
+        left: calc(100% + 20px);
+        width: 360px;
+        padding: 28px;
+    }
+}
+
+/* Mobile bottom sheet layout */
+@media (max-width: 767px) {
+    .profile-card {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        top: auto;
+        transform: none;
+        width: 100vw;
+        border-radius: 24px 24px 0 0;
+        padding: 32px 24px;
+        box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.18);
+        border: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.35);
+        background: rgba(255, 255, 255, 0.96);
+    }
+}
+
+.profile-card__name {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-black);
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.profile-card__role {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    color: #f4825c; /* Accent color */
+    margin: 0;
+}
+
+.profile-card__divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.08);
+    margin: 4px 0;
+}
+
+.profile-card__desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-dark);
+    margin: 0;
+}
+
+/* Close Button styling */
+.profile-card__close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-dark);
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+}
+
+.profile-card__close-btn:hover {
+    opacity: 1;
+}
+
+/* Tablet screen sizes for portrait */
+@media (max-width: 1023px) and (min-width: 768px) {
+    .floating-portrait-card {
+        width: 94px;
+        height: 94px;
+    }
+    
+    .floating-portrait-card__inner {
+        border-width: 2.5px;
+    }
+}
+
+/* Mobile screen sizes for portrait */
+@media (max-width: 767px) {
+    .floating-portrait-card {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .floating-portrait-card__inner {
+        border-width: 2px;
+    }
+}
