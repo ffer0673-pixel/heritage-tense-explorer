@@ -55,7 +55,7 @@
     letter-spacing: -2.5px;
     text-transform: lowercase;
     color: var(--color-dark);
-    margin-bottom: 22px;
+    margin-bottom: 0;
 }
 
 .ref-header-title span {
@@ -63,13 +63,44 @@
     font-style: italic;
 }
 
-.ref-header-subtitle {
+/* ─── Header Row Layout ─────────────────────────────────────────────────────── */
+.ref-header-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: nowrap;
+}
+
+/* ─── Academic Supervisor Block ─────────────────────────────────────────────── */
+.ref-supervisor {
+    flex-shrink: 0;
+    min-width: 0;
+    text-align: right;
+    border-left: 2px solid rgba(0, 0, 0, 0.08);
+    padding-left: 24px;
+    padding-bottom: 4px;
+}
+
+.ref-supervisor-label {
     font-family: 'DM Sans', sans-serif;
-    font-size: 1.1rem;
-    line-height: 1.7;
-    color: rgba(26, 26, 26, 0.55);
-    max-width: 560px;
-    font-weight: 400;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(26, 26, 26, 0.4);
+    margin: 0 0 5px 0;
+}
+
+.ref-supervisor-name {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 0.98rem;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    color: var(--color-dark);
+    white-space: nowrap;
+    margin: 0;
 }
 
 /* ─── Category Grid ─────────────────────────────────────────────────────────── */

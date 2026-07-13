@@ -11,6 +11,12 @@ export default function VimeoHero() {
             {/* Floating educational objects background */}
             <FloatingObjects containerRef={heroRef} />
 
+            {/* Academic Supervisor — top-left, below the navbar logo */}
+            <div className="hero-supervisor">
+                <p className="hero-supervisor__label">Academic Supervisor</p>
+                <p className="hero-supervisor__name">ISNANIAH, S.Pd., M.Pd.</p>
+            </div>
+
             {/* Pinned main landing title for the Hero section */}
             <div className="home-header__title">
                 <h2 className="vimeo-hero__title">

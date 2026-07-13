@@ -42,11 +42,16 @@ function ReferencePage() {
 
         {/* ── Page Header ─────────────────────────────────────────────── */}
         <Reveal>
-          <header className="ref-header">
+          <header className="ref-header ref-header-row">
 
             <h1 className="ref-header-title">
               sumber &amp; <span>referensi.</span>
             </h1>
+
+            <div className="ref-supervisor">
+              <p className="ref-supervisor-label">Academic Supervisor</p>
+              <p className="ref-supervisor-name">ISNANIAH, S.Pd., M.Pd.</p>
+            </div>
 
           </header>
         </Reveal>

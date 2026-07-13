@@ -36,6 +36,39 @@
 }
 
 /* ─────────────────────────────────────────────────
+   Academic Supervisor label — top-left inside hero
+   ───────────────────────────────────────────────── */
+.hero-supervisor {
+    position: absolute;
+    top: 72px;           /* sits just below the navbar height (~60px) */
+    left: 36px;
+    z-index: 4;
+    pointer-events: none;
+    user-select: none;
+}
+
+.hero-supervisor__label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: rgba(26, 26, 26, 0.38);
+    margin: 0 0 3px 0;
+    line-height: 1;
+}
+
+.hero-supervisor__name {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    color: var(--color-dark);
+    margin: 0;
+    line-height: 1;
+}
+
+/* ─────────────────────────────────────────────────
    ① Headline — bottom-left, matching the screenshot
    ───────────────────────────────────────────────── */
 .home-header__title {
