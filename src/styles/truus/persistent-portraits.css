@@ -206,4 +206,42 @@
     .floating-portrait-card__inner {
         border-width: 2px;
     }
+
+    /* Mobile image wrapper on top of profile popup */
+    .profile-card__mobile-img-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 12px;
+    }
+    
+    .profile-card__mobile-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--color-orange);
+    }
+
+    /* Full-width mobile dismiss button */
+    .profile-card__mobile-close-btn {
+        margin-top: 16px;
+        width: 100%;
+        background-color: var(--color-dark);
+        color: var(--color-white);
+        border: none;
+        border-radius: 20px;
+        padding: 12px;
+        font-family: 'Epilogue', sans-serif;
+        font-weight: 800;
+        font-size: 0.95rem;
+        cursor: pointer;
+        text-transform: lowercase;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    
+    .profile-card__mobile-close-btn:active {
+        transform: scale(0.98);
+        opacity: 0.95;
+    }
 }

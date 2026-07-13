@@ -131,7 +131,7 @@ export function Navbar() {
       <div className="nav-overlay"></div>
       <div className="navbar-wrapper">
         <motion.nav 
-          className={cn("navbar", scrolled && "navbar--scrolled")}
+          className={cn("navbar", scrolled && "navbar--scrolled", mobileOpen && "navbar--open")}
         >
           {/* Brand Logo "TensesAroundUs" placed inside nav for flex alignment */}
           <div className="navbar-logo-container">

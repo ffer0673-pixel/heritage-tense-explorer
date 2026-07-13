@@ -307,6 +307,17 @@
     .ref-header-subtitle {
         font-size: 1rem;
     }
+    .ref-header-row {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 20px !important;
+    }
+    .ref-supervisor {
+        text-align: left !important;
+        border-left: 2px solid rgba(0, 0, 0, 0.08) !important;
+        padding-left: 16px !important;
+        padding-bottom: 0 !important;
+    }
     .ref-card-header {
         padding: 22px 24px 18px;
     }

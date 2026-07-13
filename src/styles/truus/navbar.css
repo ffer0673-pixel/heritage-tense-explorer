@@ -761,4 +761,38 @@
     .navbar-logo__title {
         font-size: 1.2rem;
     }
+
+    /* Mobile Fullscreen Overlay and Open Navbar Styling */
+    .navbar.navbar--open .navbar-logo__title,
+    .navbar.navbar--open .navbar-logo__underline-svg {
+        color: var(--color-white) !important;
+    }
+    
+    .nav-mobile-overlay {
+        background-color: rgba(20, 20, 20, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                    visibility 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .nav-mobile-menu {
+        gap: 24px;
+        width: 100%;
+        padding: 0 40px;
+        align-items: flex-start; /* Left-aligned for a premium Stripe-like menu */
+        max-width: 480px;
+    }
+    
+    .nav-mobile-item {
+        font-size: 2.2rem;
+        font-weight: 750;
+        letter-spacing: -1px;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    .nav-mobile-item.active {
+        color: var(--color-orange) !important;
+        opacity: 1 !important;
+    }
 }

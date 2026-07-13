@@ -86,10 +86,10 @@ function initCardAnimations() {
         { rotation: -8 }
     ];
 
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const isDesktop = window.innerWidth >= 1024;
     let leaveTimeout: NodeJS.Timeout | null = null;
 
-    if (!isMobile) {
+    if (isDesktop) {
         cards.forEach((card, index) => {
             card.addEventListener('mouseenter', () => {
                 if (leaveTimeout) { clearTimeout(leaveTimeout); leaveTimeout = null; }
@@ -144,49 +144,18 @@ function initCardAnimations() {
             });
         });
     } else {
-        // ─── Mobile: Stacked card scroll reveal ───
-        const cardsWrapper = document.querySelector('.cards-wrapper');
-        const scrollPerCard = window.innerHeight * 0.8;
-        const navH = 60;
-        const mobileRotations = [-6, 4, -8, 5];
-
+        // Mobile & Tablet: Let CSS control the grid/column layout. No absolute positioning or pinning.
         cards.forEach((card, i) => {
             gsap.set(card, {
-                position: 'absolute', left: '50%', top: '0', xPercent: -50,
-                y: i === 0 ? 0 : window.innerHeight * 1.1,
-                rotation: mobileRotations[i % mobileRotations.length],
+                position: 'relative',
+                left: 'auto',
+                top: 'auto',
+                xPercent: 0,
+                y: 0,
+                rotation: 0,
                 zIndex: i + 1,
-                transformOrigin: 'center center'
+                transform: 'none'
             });
-        });
-
-        const wrapperH = window.innerHeight * 0.7 + scrollPerCard * (cards.length - 1);
-        gsap.set(cardsWrapper, { height: wrapperH });
-
-        ScrollTrigger.create({
-            trigger: cardsWrapper,
-            start: `top ${navH}px`,
-            end: `+=${scrollPerCard * (cards.length - 1)}`,
-            pin: true,
-            pinSpacing: true,
-            id: 'mobile-cards-pin'
-        });
-
-        cards.forEach((card, i) => {
-            if (i === 0) return;
-            gsap.fromTo(card,
-                { y: window.innerHeight * 1.1 },
-                {
-                    y: 0,
-                    ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: cardsWrapper,
-                        start: `top+=${(i - 1) * scrollPerCard} ${navH}px`,
-                        end: `top+=${i * scrollPerCard} ${navH}px`,
-                        scrub: 0.4
-                    }
-                }
-            );
         });
     }
 }

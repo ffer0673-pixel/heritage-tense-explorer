@@ -151,9 +151,9 @@ const getLayoutForSection = (
     switch (section) {
       case "hero":
         // Frame the Hero title on mobile (placed high/low vertically to prevent text overlap)
-        pA = { x: width / 2 - 100 - cardW / 2, y: height * 0.74, scale: 0.75, rotate: -6, opacity: 1 };
-        pB = { x: width / 2 - cardW / 2, y: height * 0.06, scale: 0.8, rotate: 8, opacity: 1 };
-        pC = { x: width / 2 + 100 - cardW / 2, y: height * 0.74, scale: 0.7, rotate: -4, opacity: 1 };
+        pA = { x: 20, y: height * 0.74, scale: 0.75, rotate: -6, opacity: 1 };
+        pB = { x: width - cardW - 20, y: height * 0.16, scale: 0.8, rotate: 8, opacity: 1 };
+        pC = { x: width - cardW - 20, y: height * 0.74, scale: 0.75, rotate: -4, opacity: 1 };
         break;
       case "double-marquee":
         pA = { x: 10, y: mobileY, scale: 0.8, rotate: -5, opacity: 1 };
@@ -811,10 +811,23 @@ export default function PersistentPortraits() {
                 <path d="M1 1L13 13M1 13L13 1" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
+            <div className="profile-card__mobile-img-wrapper">
+              <img
+                src={activePortrait === 'fardan' ? '/ferdian.png' : activePortrait === 'bintang' ? '/assets/hijab-woman.jpg' : '/assets/hijab-woman-2.jpg'}
+                alt={profiles[activePortrait].name}
+                className="profile-card__mobile-img"
+              />
+            </div>
             <h3 className="profile-card__name">{profiles[activePortrait].name}</h3>
             <p className="profile-card__role">{profiles[activePortrait].role}</p>
             <div className="profile-card__divider" />
             <p className="profile-card__desc">{profiles[activePortrait].desc}</p>
+            <button
+              onClick={() => setActivePortrait(null)}
+              className="profile-card__mobile-close-btn"
+            >
+              tutup
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

@@ -408,6 +408,17 @@
         font-size: 1.3rem;
     }
 
+    .quiz-filters {
+        gap: 8px !important;
+        margin-bottom: 30px !important;
+    }
+
+    .quiz-filter-btn {
+        padding: 8px 16px !important;
+        font-size: 0.85rem !important;
+        border-width: 1.5px !important;
+    }
+
     .quiz-cards-grid {
         grid-template-columns: 1fr;
         gap: 30px;
@@ -769,6 +780,23 @@
     
     .quiz-runner-question {
         font-size: 1.6rem;
+        margin-bottom: 24px !important;
+    }
+
+    .quiz-progress-bar-bg {
+        margin-bottom: 20px !important;
+    }
+
+    .quiz-choice-btn {
+        padding: 1rem 1.25rem !important;
+        font-size: 1rem !important;
+        border-radius: 12px !important;
+    }
+
+    .quiz-explanation-box {
+        font-size: 0.95rem !important;
+        padding: 1rem 1.25rem !important;
+        margin-top: 20px !important;
     }
     
     .quiz-decor-star,

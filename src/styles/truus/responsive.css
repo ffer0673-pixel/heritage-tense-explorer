@@ -1,26 +1,26 @@
-/* ─── Tablet (769px – 1200px) ────────────────────────────────────────────── */
-@media (min-width: 769px) and (max-width: 1200px) {
+/* ─── Tablet (768px – 1023px) ────────────────────────────────────────────── */
+@media (min-width: 768px) and (max-width: 1023px) {
     .cards-wrapper {
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 50px;
-        padding-bottom: 50px;
-        gap: 30px;
-        overflow: visible;
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 30px !important;
+        height: auto !important;
+        width: 100% !important;
+        max-width: 800px !important;
+        margin: 60px auto !important;
+        padding: 0 24px !important;
+        overflow: visible !important;
     }
 
     .card {
-        position: relative;
+        position: relative !important;
         left: auto !important;
         top: auto !important;
         transform: none !important;
-        width: 90%;
-        max-width: 400px;
-        height: auto;
-        min-height: 400px;
-        margin-bottom: 20px;
+        width: 100% !important;
+        max-width: none !important;
+        height: 460px !important;
+        margin: 0 !important;
     }
 }
 
@@ -101,18 +101,26 @@
 
     /* ── Cards (GSAP-controlled) ─────── */
     .cards-wrapper {
-        position: relative !important;
-        display: block !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
         width: 100% !important;
-        margin: 0 auto !important;
+        gap: 32px !important;
+        padding: 0 20px !important;
+        margin: 40px auto !important;
+        height: auto !important;
         overflow: visible !important;
     }
 
     .card {
-        width: 82vw;
-        max-width: 340px;
-        min-height: 420px;
-        height: auto;
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+        width: 100% !important;
+        max-width: 380px !important;
+        height: 440px !important;
+        margin: 0 !important;
     }
 
     .card-sticker {
@@ -251,5 +259,15 @@
 
     .credits-name {
         font-size: 0.95rem;
+    }
+}
+
+/* ─── Footer Tablet Grid (768px – 1023px) ─────────────────────────────────── */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .footer-top {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 40px !important;
+        flex-direction: row !important;
     }
 }

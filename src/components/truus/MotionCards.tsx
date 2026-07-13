@@ -35,7 +35,10 @@ export default function MotionCards() {
     const section = sectionRef.current;
     if (!section) return;
 
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia(section);
+
+    // Desktop layout
+    mm.add("(min-width: 768px)", () => {
       // Initialize starting values
       // Slide 0 is the base layer, visible initially
       gsap.set(slideRefs.current[0], { "--reveal": 0 });
@@ -151,10 +154,127 @@ export default function MotionCards() {
         duration: 4.0,
         ease: "none",
       }, 0);
+    });
 
-    }, section);
+    // Mobile layout
+    mm.add("(max-width: 767px)", () => {
+      // Initialize starting values without large vertical translations for content
+      gsap.set(slideRefs.current[0], { "--reveal": 0 });
+      gsap.set(contentRefs.current[0], { autoAlpha: 1, y: 0 });
+      
+      // Slides 1-4 start hidden
+      for (let i = 1; i < 5; i++) {
+        gsap.set(slideRefs.current[i], { "--reveal": 100 });
+        gsap.set(contentRefs.current[i], { autoAlpha: 0, y: 0 });
+      }
 
-    return () => ctx.revert();
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: "+=400%", // 400% of viewport height (4 transition steps)
+          scrub: true,
+          pin: true,
+          anticipatePin: 1,
+        },
+      });
+
+      // 1. Transition to Slide 1
+      tl.to(slideRefs.current[1], {
+        "--reveal": 0,
+        duration: 1.0,
+        ease: "none",
+      }, 0.0);
+      tl.to(contentRefs.current[0], {
+        autoAlpha: 0,
+        y: 0,
+        duration: 0.4,
+        ease: "power1.inOut",
+      }, 0.0);
+      tl.to(contentRefs.current[1], {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.4,
+        ease: "power1.inOut",
+      }, 0.4); // Faster transition overlap for mobile cross-fade
+
+      // 2. Transition to Slide 2
+      tl.to(slideRefs.current[2], {
+        "--reveal": 0,
+        duration: 1.0,
+        ease: "none",
+      }, 1.0);
+      tl.to(contentRefs.current[1], {
+        autoAlpha: 0,
+        y: 0,
+        duration: 0.4,
+        ease: "power1.inOut",
+      }, 1.0);
+      tl.to(contentRefs.current[2], {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.4,
+        ease: "power1.inOut",
+      }, 1.4);
+
+      // 3. Transition to Slide 3
+      tl.to(slideRefs.current[3], {
+        "--reveal": 0,
+        duration: 1.0,
+        ease: "none",
+      }, 2.0);
+      tl.to(contentRefs.current[2], {
+        autoAlpha: 0,
+        y: 0,
+        duration: 0.4,
+        ease: "power1.inOut",
+      }, 2.0);
+      tl.to(contentRefs.current[3], {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.4,
+        ease: "power1.inOut",
+      }, 2.4);
+
+      // 4. Transition to Slide 4
+      tl.to(slideRefs.current[4], {
+        "--reveal": 0,
+        duration: 1.0,
+        ease: "none",
+      }, 3.0);
+      tl.to(contentRefs.current[3], {
+        autoAlpha: 0,
+        y: 0,
+        duration: 0.4,
+        ease: "power1.inOut",
+      }, 3.0);
+      tl.to(contentRefs.current[4], {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.4,
+        ease: "power1.inOut",
+      }, 3.4);
+
+      // 5. Image Pan & Zoom Parallax (y: -20 instead of -40 to remain safe within the expanded container height)
+      CULTURAL_CARDS.forEach((_, i) => {
+        const startOffset = i === 0 ? 0 : i - 1;
+        tl.to(imgRefs.current[i], {
+          scale: 1.05,
+          y: -20,
+          duration: 1.5,
+          ease: "none",
+        }, startOffset);
+      });
+
+      // 6. Global horizontal progress line
+      tl.to(progressBarRef.current, {
+        width: "100%",
+        duration: 4.0,
+        ease: "none",
+      }, 0);
+    });
+
+    return () => mm.revert();
   }, []);
 
   return (
